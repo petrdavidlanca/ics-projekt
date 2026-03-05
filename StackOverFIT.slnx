@@ -1,0 +1,5 @@
+<Solution>
+  <Folder Name="/App/">
+    <Project Path="StackOverFIT.DAL/StackOverFIT.DAL.csproj" />
+  </Folder>
+</Solution>
