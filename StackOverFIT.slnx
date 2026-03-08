@@ -2,4 +2,5 @@
   <Folder Name="/App/">
     <Project Path="StackOverFIT.DAL/StackOverFIT.DAL.csproj" />
   </Folder>
+  <Project Path="StackOverFIT.DAL.Tests/StackOverFIT.DAL.Tests.csproj" Id="d1a2b443-76c0-4650-86be-1a5f2e35c401" />
 </Solution>
