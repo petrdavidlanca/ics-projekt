@@ -11,8 +11,10 @@ namespace StackOverFIT.BL.Facades;
 public class LibraryFacade(
     IUnitOfWorkFactory unitOfWorkFactory,
     LibraryModelMapper modelMapper)
-    : FacadeBase<library_entity, LibraryListModel, LibraryDetailModel, LibraryEntityMapper>(
+    : FacadeBase<LibraryEntity, LibraryListModel, LibraryDetailModel, LibraryEntityMapper>(
         unitOfWorkFactory, modelMapper), ILibraryFacade
 {
+    public async Task AddVideoGameAsync(Guid libraryId, Guid videoGameId) { }
 
+    public async Task RemoveVideoGameAsync(Guid libraryId, Guid videoGameId) { }
 }

@@ -20,7 +20,7 @@ namespace StackOverFIT.DAL.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.3");
 
-            modelBuilder.Entity("StackOverFIT.DAL.Entities.library_entity", b =>
+            modelBuilder.Entity("StackOverFIT.DAL.Entities.LibraryEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -33,42 +33,42 @@ namespace StackOverFIT.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("num_of_games")
+                    b.Property<int>("NumOfGames")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("user_entityId")
+                    b.Property<Guid?>("UserEntityId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("user_entityId");
+                    b.HasIndex("UserEntityId");
 
                     b.ToTable("libraries");
                 });
 
-            modelBuilder.Entity("StackOverFIT.DAL.Entities.user_entity", b =>
+            modelBuilder.Entity("StackOverFIT.DAL.Entities.UserEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("email")
+                    b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("real_name")
+                    b.Property<string>("RealName")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("surname")
+                    b.Property<string>("Surname")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("total_num_of_games")
+                    b.Property<int>("TotalNumOfGames")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("total_num_of_libraries")
+                    b.Property<int>("TotalNumOfLibraries")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("username")
+                    b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -77,7 +77,7 @@ namespace StackOverFIT.DAL.Migrations
                     b.ToTable("users");
                 });
 
-            modelBuilder.Entity("StackOverFIT.DAL.Entities.video_game_entity", b =>
+            modelBuilder.Entity("StackOverFIT.DAL.Entities.VideoGameEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -90,49 +90,49 @@ namespace StackOverFIT.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.PrimitiveCollection<string>("game_genres")
+                    b.PrimitiveCollection<string>("GameGenres")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("library_entityId")
+                    b.Property<Guid?>("LibraryEntityId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("name")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("pegi_rating")
+                    b.Property<int>("PegiRating")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("library_entityId");
+                    b.HasIndex("LibraryEntityId");
 
-                    b.ToTable("video_games");
+                    b.ToTable("VideoGames");
                 });
 
-            modelBuilder.Entity("StackOverFIT.DAL.Entities.library_entity", b =>
+            modelBuilder.Entity("StackOverFIT.DAL.Entities.LibraryEntity", b =>
                 {
-                    b.HasOne("StackOverFIT.DAL.Entities.user_entity", null)
-                        .WithMany("game_library")
-                        .HasForeignKey("user_entityId");
+                    b.HasOne("StackOverFIT.DAL.Entities.UserEntity", null)
+                        .WithMany("GameLibrary")
+                        .HasForeignKey("UserEntityId");
                 });
 
-            modelBuilder.Entity("StackOverFIT.DAL.Entities.video_game_entity", b =>
+            modelBuilder.Entity("StackOverFIT.DAL.Entities.VideoGameEntity", b =>
                 {
-                    b.HasOne("StackOverFIT.DAL.Entities.library_entity", null)
-                        .WithMany("video_games")
-                        .HasForeignKey("library_entityId");
+                    b.HasOne("StackOverFIT.DAL.Entities.LibraryEntity", null)
+                        .WithMany("VideoGames")
+                        .HasForeignKey("LibraryEntityId");
                 });
 
-            modelBuilder.Entity("StackOverFIT.DAL.Entities.library_entity", b =>
+            modelBuilder.Entity("StackOverFIT.DAL.Entities.LibraryEntity", b =>
                 {
-                    b.Navigation("video_games");
+                    b.Navigation("VideoGames");
                 });
 
-            modelBuilder.Entity("StackOverFIT.DAL.Entities.user_entity", b =>
+            modelBuilder.Entity("StackOverFIT.DAL.Entities.UserEntity", b =>
                 {
-                    b.Navigation("game_library");
+                    b.Navigation("GameLibrary");
                 });
 #pragma warning restore 612, 618
         }

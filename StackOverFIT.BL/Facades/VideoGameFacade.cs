@@ -11,7 +11,7 @@ namespace StackOverFIT.BL.Facades;
 public class VideoGameFacade(
     IUnitOfWorkFactory unitOfWorkFactory,
     VideoGameModelMapper modelMapper)
-    : FacadeBase<video_game_entity, VideoGameListModel, VideoGameDetailModel, VideoGameEntityMapper>(
+    : FacadeBase<VideoGameEntity, VideoGameListModel, VideoGameDetailModel, VideoGameEntityMapper>(
         unitOfWorkFactory, modelMapper), IVideoGameFacade
 {
 

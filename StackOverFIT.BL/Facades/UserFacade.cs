@@ -11,7 +11,7 @@ namespace StackOverFIT.BL.Facades;
 public class UserFacade(
     IUnitOfWorkFactory unitOfWorkFactory,
     UserModelMapper modelMapper)
-    : FacadeBase<user_entity, UserListModel, UserDetailModel, UserEntityMapper>(
+    : FacadeBase<UserEntity, UserListModel, UserDetailModel, UserEntityMapper>(
         unitOfWorkFactory, modelMapper), IUserFacade
 {
 

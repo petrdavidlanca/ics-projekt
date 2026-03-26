@@ -5,93 +5,90 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace StackOverFIT.DAL.Migrations
 {
-    /// <inheritdoc />
     public partial class CurrentState : Migration
     {
-        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "users",
+                name: "Users",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    username = table.Column<string>(type: "TEXT", nullable: false),
-                    email = table.Column<string>(type: "TEXT", nullable: false),
-                    real_name = table.Column<string>(type: "TEXT", nullable: true),
-                    surname = table.Column<string>(type: "TEXT", nullable: true),
-                    total_num_of_games = table.Column<int>(type: "INTEGER", nullable: false),
-                    total_num_of_libraries = table.Column<int>(type: "INTEGER", nullable: false)
+                    Username = table.Column<string>(type: "TEXT", nullable: false),
+                    Email = table.Column<string>(type: "TEXT", nullable: false),
+                    RealName = table.Column<string>(type: "TEXT", nullable: true),
+                    Surname = table.Column<string>(type: "TEXT", nullable: true),
+                    TotalNumOfGames = table.Column<int>(type: "INTEGER", nullable: false),
+                    TotalNumOfLibraries = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_users", x => x.Id);
+                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "libraries",
+                name: "Libraries",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    name = table.Column<string>(type: "TEXT", nullable: false),
-                    description = table.Column<string>(type: "TEXT", nullable: true),
-                    num_of_games = table.Column<int>(type: "INTEGER", nullable: false),
-                    user_entityId = table.Column<Guid>(type: "TEXT", nullable: true)
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: true),
+                    NumOfGames = table.Column<int>(type: "INTEGER", nullable: false),
+                    UserEntityId = table.Column<Guid>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_libraries", x => x.Id);
+                    table.PrimaryKey("PK_Libraries", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_libraries_users_user_entityId",
-                        column: x => x.user_entityId,
-                        principalTable: "users",
+                        name: "FK_Libraries_Users_UserEntityId",
+                        column: x => x.UserEntityId,
+                        principalTable: "Users",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "video_games",
+                name: "VideoGames",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    name = table.Column<string>(type: "TEXT", nullable: false),
-                    description = table.Column<string>(type: "TEXT", nullable: false),
-                    pegi_rating = table.Column<int>(type: "INTEGER", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: false),
+                    PegiRating = table.Column<int>(type: "INTEGER", nullable: false),
                     ImageUrl = table.Column<string>(type: "TEXT", nullable: true),
-                    game_genres = table.Column<string>(type: "TEXT", nullable: false),
-                    library_entityId = table.Column<Guid>(type: "TEXT", nullable: true)
+                    GameGenres = table.Column<string>(type: "TEXT", nullable: false),
+                    LibraryEntityId = table.Column<Guid>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_video_games", x => x.Id);
+                    table.PrimaryKey("PK_VideoGames", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_video_games_libraries_library_entityId",
-                        column: x => x.library_entityId,
-                        principalTable: "libraries",
+                        name: "FK_VideoGames_Libraries_LibraryEntityId",
+                        column: x => x.LibraryEntityId,
+                        principalTable: "Libraries",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_libraries_user_entityId",
-                table: "libraries",
-                column: "user_entityId");
+                name: "IX_Libraries_UserEntityId",
+                table: "Libraries",
+                column: "UserEntityId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_video_games_library_entityId",
-                table: "video_games",
-                column: "library_entityId");
+                name: "IX_VideoGames_LibraryEntityId",
+                table: "VideoGames",
+                column: "LibraryEntityId");
         }
 
-        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "video_games");
+                name: "VideoGames");
 
             migrationBuilder.DropTable(
-                name: "libraries");
+                name: "Libraries");
 
             migrationBuilder.DropTable(
-                name: "users");
+                name: "Users");
         }
     }
 }

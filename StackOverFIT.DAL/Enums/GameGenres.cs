@@ -1,11 +1,11 @@
 ﻿namespace StackOverFIT.DAL.Enums;
 
-public enum game_genres
+public enum GameGenres
 {
     None = 0,
-    Role_Playing_Game = 1,
+    RolePlayingGame = 1,
     Simulation = 2,
-    First_Person_Shooter = 3,
+    FirstPersonShooter = 3,
     Action = 4,
     Adventure = 5,
     Strategy = 6,

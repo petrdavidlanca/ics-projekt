@@ -2,12 +2,12 @@
 
 namespace StackOverFIT.DAL.Mappers;
 
-public class LibraryEntityMapper : IEntityMapper<library_entity>
+public class LibraryEntityMapper : IEntityMapper<LibraryEntity>
 {
-    public void MapToExistingEntity(library_entity existingEntity, library_entity newEntity)
+    public void MapToExistingEntity(LibraryEntity existingEntity, LibraryEntity newEntity)
     {
-        existingEntity.name = newEntity.name;
-        existingEntity.description = newEntity.description;
-        existingEntity.num_of_games = newEntity.num_of_games;
+        existingEntity.Name = newEntity.Name;
+        existingEntity.Description = newEntity.Description;
+        existingEntity.NumOfGames = newEntity.NumOfGames;
     }
 }

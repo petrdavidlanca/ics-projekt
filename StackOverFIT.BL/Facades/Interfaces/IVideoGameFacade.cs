@@ -4,6 +4,6 @@ using StackOverFIT.BL.Facades;
 
 namespace StackOverFIT.BL.Facades;
 
-public interface IVideoGameFacade : IFacade<video_game_entity, VideoGameListModel, VideoGameDetailModel>
+public interface IVideoGameFacade : IFacade<VideoGameEntity, VideoGameListModel, VideoGameDetailModel>
 {
 }
