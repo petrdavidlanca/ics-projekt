@@ -11,4 +11,5 @@ public record VideoGameEntity : IEntity
 
     public ICollection<GameGenres> GameGenres { get; init; } = new List<GameGenres>();
     public required Guid Id { get; set; }
+    public Guid? LibraryId { get; set; }
 }
