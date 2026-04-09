@@ -6,15 +6,15 @@ namespace StackOverFIT.BL.Models;
 public partial class UserListModel : ModelBase
 {
     [ObservableProperty]
-    public required partial string username { get; set; }
+    public required partial string Username { get; set; }
 
     [ObservableProperty]
-    public required partial string email { get; set; }
+    public required partial string Email { get; set; }
 
-    public static UserListModel empty => new()
+    public static UserListModel Empty => new()
     {
         Id = Guid.Empty,
-        username = string.Empty,
-        email = string.Empty
+        Username = string.Empty,
+        Email = string.Empty
     };
 }

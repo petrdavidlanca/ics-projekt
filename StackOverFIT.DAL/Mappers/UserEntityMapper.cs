@@ -2,15 +2,15 @@
 
 namespace StackOverFIT.DAL.Mappers;
 
-public class UserEntityMapper : IEntityMapper<user_entity>
+public class UserEntityMapper : IEntityMapper<UserEntity>
 {
-    public void MapToExistingEntity(user_entity existingEntity, user_entity newEntity)
+    public void MapToExistingEntity(UserEntity existingEntity, UserEntity newEntity)
     {
-        existingEntity.username = newEntity.username;
-        existingEntity.email = newEntity.email;
-        existingEntity.real_name = newEntity.real_name;
-        existingEntity.surname = newEntity.surname;
-        existingEntity.total_num_of_games = newEntity.total_num_of_games;
-        existingEntity.total_num_of_libraries = newEntity.total_num_of_libraries;
+        existingEntity.Username = newEntity.Username;
+        existingEntity.Email = newEntity.Email;
+        existingEntity.RealName = newEntity.RealName;
+        existingEntity.Surname = newEntity.Surname;
+        existingEntity.TotalNumOfGames = newEntity.TotalNumOfGames;
+        existingEntity.TotalNumOfLibraries = newEntity.TotalNumOfLibraries;
     }
 }

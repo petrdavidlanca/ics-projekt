@@ -14,31 +14,31 @@ public class DbContextVideoGameTests(ITestOutputHelper output) : DbContextTestsB
     public async Task AddNew_VideoGame_Persisted()
     {
         // Arrange
-        var entity = new video_game_entity
+        var entity = new VideoGameEntity
         {
             Id = Guid.NewGuid(),
-            name = "GTA 6",
-            description = "Pribehovka s otevrenym svetem",
-            pegi_rating = 18,
+            Name = "GTA 6",
+            Description = "Pribehovka s otevrenym svetem",
+            PegiRating = 18,
             ImageUrl = "https://example.com/gta6.jpg"
         };
 
         // Act
-        StackOverFITDbContextSUT.video_games.Add(entity);
+        StackOverFITDbContextSUT.VideoGames.Add(entity);
         await StackOverFITDbContextSUT.SaveChangesAsync();
 
         // Assert
         await using var db_assert = await DbContextFactory.CreateDbContextAsync();
-        var actual_entity = await db_assert.video_games.SingleAsync(i => i.Id == entity.Id);
+        var actual_entity = await db_assert.VideoGames.SingleAsync(i => i.Id == entity.Id);
 
         Assert.Equal(
             entity with 
             { 
-                game_genres = Array.Empty<game_genres>() 
+                GameGenres = Array.Empty<GameGenres>() 
             },
             actual_entity with 
             { 
-                game_genres = Array.Empty<game_genres>() 
+                GameGenres = Array.Empty<GameGenres>() 
             }
         );
     }
@@ -48,35 +48,35 @@ public class DbContextVideoGameTests(ITestOutputHelper output) : DbContextTestsB
     {
         // Arrange
         var game_id = Guid.NewGuid();
-        var baseGame = new video_game_entity
+        var baseGame = new VideoGameEntity
         {
             Id = game_id,
-            name = "Minecraft",
-            description = "Puvodni popis",
-            pegi_rating = 18
+            Name = "Minecraft",
+            Description = "Puvodni popis",
+            PegiRating = 18
         };
 
         await using var db_setup = await DbContextFactory.CreateDbContextAsync();
-        db_setup.video_games.Add(baseGame);
+        db_setup.VideoGames.Add(baseGame);
         await db_setup.SaveChangesAsync();
 
         // Act
         var entity_to_update = baseGame with
         {
-            name = "Minecraft 2",
-            description = "Minecraft na steroidech"
+            Name = "Minecraft 2",
+            Description = "Minecraft na steroidech"
         };
 
-        StackOverFITDbContextSUT.video_games.Update(entity_to_update);
+        StackOverFITDbContextSUT.VideoGames.Update(entity_to_update);
         await StackOverFITDbContextSUT.SaveChangesAsync();
 
         // Assert
         await using var db_assert = await DbContextFactory.CreateDbContextAsync();
-        var actual_entity = await db_assert.video_games.SingleAsync(i => i.Id == game_id);
+        var actual_entity = await db_assert.VideoGames.SingleAsync(i => i.Id == game_id);
 
         Assert.Equal(
-            entity_to_update with { game_genres = Array.Empty<game_genres>() },
-            actual_entity with { game_genres = Array.Empty<game_genres>() }
+            entity_to_update with { GameGenres = Array.Empty<GameGenres>() },
+            actual_entity with { GameGenres = Array.Empty<GameGenres>() }
         );
     }
 
@@ -84,24 +84,24 @@ public class DbContextVideoGameTests(ITestOutputHelper output) : DbContextTestsB
     public async Task Delete_VideoGame_Deleted()
     {
         // Arrange
-        var game = new video_game_entity
+        var game = new VideoGameEntity
         {
             Id = Guid.NewGuid(),
-            name = "Hra ke smazání",
-            description = "Brzy zmizím",
-            pegi_rating = 3
+            Name = "Hra ke smazání",
+            Description = "Brzy zmizím",
+            PegiRating = 3
         };
 
         await using var db_setup = await DbContextFactory.CreateDbContextAsync();
-        db_setup.video_games.Add(game);
+        db_setup.VideoGames.Add(game);
         await db_setup.SaveChangesAsync();
 
         // Act
-        StackOverFITDbContextSUT.video_games.Remove(game);
+        StackOverFITDbContextSUT.VideoGames.Remove(game);
         await StackOverFITDbContextSUT.SaveChangesAsync();
 
         // Assert
         await using var db_assert = await DbContextFactory.CreateDbContextAsync();
-        Assert.False(await db_assert.video_games.AnyAsync(i => i.Id == game.Id));
+        Assert.False(await db_assert.VideoGames.AnyAsync(i => i.Id == game.Id));
     }
 }

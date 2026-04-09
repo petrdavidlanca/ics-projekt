@@ -6,13 +6,13 @@ namespace StackOverFIT.BL.Models;
 public partial class VideoGameDetailModel : ModelBase
 {
     [ObservableProperty]
-    public required partial string name { get; set; }
+    public required partial string Name { get; set; }
 
     [ObservableProperty]
-    public required partial string description { get; set; }
+    public required partial string Description { get; set; }
 
     [ObservableProperty]
-    public partial int pegi_rating { get; set; }
+    public partial int PegiRating { get; set; }
 
     [ObservableProperty]
     public partial string? ImageUrl { get; set; }
@@ -20,8 +20,8 @@ public partial class VideoGameDetailModel : ModelBase
     public static VideoGameDetailModel Empty => new()
     {
         Id = Guid.Empty,
-        name = string.Empty,
-        description = string.Empty,
-        pegi_rating = 0
+        Name = string.Empty,
+        Description = string.Empty,
+        PegiRating = 0
     };
 }

@@ -3,37 +3,37 @@ using StackOverFIT.DAL.Entities;
 
 namespace StackOverFIT.BL.Mappers;
 
-public class VideoGameModelMapper : ModelMapperBase<video_game_entity, VideoGameListModel, VideoGameDetailModel>
+public class VideoGameModelMapper : ModelMapperBase<VideoGameEntity, VideoGameListModel, VideoGameDetailModel>
 {
-    public override VideoGameListModel MapToListModel(video_game_entity? entity)
+    public override VideoGameListModel MapToListModel(VideoGameEntity? entity)
         => entity is null
             ? VideoGameListModel.Empty
             : new VideoGameListModel
             {
                 Id = entity.Id,
-                name = entity.name,
+                Name = entity.Name,
                 ImageUrl = entity.ImageUrl
             };
 
-    public override VideoGameDetailModel MapToDetailModel(video_game_entity? entity)
+    public override VideoGameDetailModel MapToDetailModel(VideoGameEntity? entity)
         => entity is null
             ? VideoGameDetailModel.Empty
             : new VideoGameDetailModel
             {
                 Id = entity.Id,
-                name = entity.name,
-                description = entity.description,
-                pegi_rating = entity.pegi_rating,
+                Name = entity.Name,
+                Description = entity.Description,
+                PegiRating = entity.PegiRating,
                 ImageUrl = entity.ImageUrl
             };
 
-    public override video_game_entity MapToEntity(VideoGameDetailModel model)
+    public override VideoGameEntity MapToEntity(VideoGameDetailModel model)
         => new()
         {
             Id = model.Id,
-            name = model.name,
-            description = model.description,
-            pegi_rating = model.pegi_rating,
+            Name = model.Name,
+            Description = model.Description,
+            PegiRating = model.PegiRating,
             ImageUrl = model.ImageUrl
         };
 }

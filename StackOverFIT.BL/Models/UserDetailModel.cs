@@ -6,29 +6,29 @@ namespace StackOverFIT.BL.Models;
 public partial class UserDetailModel : ModelBase
 {
     [ObservableProperty]
-    public required partial string username { get; set; }
+    public required partial string Username { get; set; }
 
     [ObservableProperty]
-    public required partial string email { get; set; }
+    public required partial string Email { get; set; }
 
     [ObservableProperty]
-    public partial string? real_name { get; set; }
+    public partial string? RealName { get; set; }
 
     [ObservableProperty]
-    public partial string? surname { get; set; }
+    public partial string? Surname { get; set; }
 
     [ObservableProperty]
-    public partial int total_num_of_games { get; set; }
+    public partial int TotalNumOfGames { get; set; }
 
     [ObservableProperty]
-    public partial int total_num_of_libraries { get; set; }
+    public partial int TotalNumOfLibraries { get; set; }
 
     public static UserDetailModel Empty => new()
     {
         Id = Guid.Empty,
-        username = string.Empty,
-        email = string.Empty,
-        total_num_of_games = 0,
-        total_num_of_libraries = 0
+        Username = string.Empty,
+        Email = string.Empty,
+        TotalNumOfGames = 0,
+        TotalNumOfLibraries = 0
     };
 }

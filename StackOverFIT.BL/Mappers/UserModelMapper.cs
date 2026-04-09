@@ -3,41 +3,41 @@ using StackOverFIT.DAL.Entities;
 
 namespace StackOverFIT.BL.Mappers;
 
-public class UserModelMapper : ModelMapperBase<user_entity, UserListModel, UserDetailModel>
+public class UserModelMapper : ModelMapperBase<UserEntity, UserListModel, UserDetailModel>
 {
-    public override UserListModel MapToListModel(user_entity? entity)
+    public override UserListModel MapToListModel(UserEntity? entity)
         => entity is null
-            ? UserListModel.empty
+            ? UserListModel.Empty
             : new UserListModel
             {
                 Id = entity.Id,
-                username = entity.username,
-                email = entity.email
+                Username = entity.Username,
+                Email = entity.Email
             };
 
-    public override UserDetailModel MapToDetailModel(user_entity? entity)
+    public override UserDetailModel MapToDetailModel(UserEntity? entity)
         => entity is null
             ? UserDetailModel.Empty
             : new UserDetailModel
             {
                 Id = entity.Id,
-                username = entity.username,
-                email = entity.email,
-                real_name = entity.real_name,
-                surname = entity.surname,
-                total_num_of_games = entity.total_num_of_games,
-                total_num_of_libraries = entity.total_num_of_libraries
+                Username = entity.Username,
+                Email = entity.Email,
+                RealName = entity.RealName,
+                Surname = entity.Surname,
+                TotalNumOfGames = entity.TotalNumOfGames,
+                TotalNumOfLibraries = entity.TotalNumOfLibraries
             };
 
-    public override user_entity MapToEntity(UserDetailModel model)
+    public override UserEntity MapToEntity(UserDetailModel model)
         => new()
         {
             Id = model.Id,
-            username = model.username,
-            email = model.email,
-            real_name = model.real_name,
-            surname = model.surname,
-            total_num_of_games = model.total_num_of_games,
-            total_num_of_libraries = model.total_num_of_libraries
+            Username = model.Username,
+            Email = model.Email,
+            RealName = model.RealName,
+            Surname = model.Surname,
+            TotalNumOfGames = model.TotalNumOfGames,
+            TotalNumOfLibraries = model.TotalNumOfLibraries
         };
 }
