@@ -23,7 +23,6 @@ public class LibraryFacadeTests : FacadeTestsBase
     [Fact]
     public async Task AddVideoGameAsync_Adds_Game_To_Library()
     {
-        // Arrange
         var library = new LibraryEntity
         {
             Id = Guid.NewGuid(),
@@ -42,14 +41,11 @@ public class LibraryFacadeTests : FacadeTestsBase
         StackOverFITDbContextSUT.VideoGames.Add(game);
         await StackOverFITDbContextSUT.SaveChangesAsync();
 
-        // Act
         await _libraryFacade.AddVideoGameAsync(library.Id, game.Id);
 
-        // ❗ Reload entity from DB using a fresh DbContext
         await using var verifyCtx = DbContextFactory.CreateDbContext();
         var updatedGame = await verifyCtx.VideoGames.FindAsync(game.Id);
 
-        // Assert
         Assert.NotNull(updatedGame);
         Assert.Equal(library.Id, updatedGame!.LibraryId);
     }
@@ -57,7 +53,6 @@ public class LibraryFacadeTests : FacadeTestsBase
     [Fact]
     public async Task RemoveVideoGameAsync_Removes_Game_From_Library()
     {
-        // Arrange
         var library = new LibraryEntity
         {
             Id = Guid.NewGuid(),
@@ -77,10 +72,8 @@ public class LibraryFacadeTests : FacadeTestsBase
         StackOverFITDbContextSUT.VideoGames.Add(game);
         await StackOverFITDbContextSUT.SaveChangesAsync();
 
-        // Act
         await _libraryFacade.RemoveVideoGameAsync(library.Id, game.Id);
 
-        // Assert – načíst z nového DbContextu
         await using var verifyCtx = DbContextFactory.CreateDbContext();
         var updatedGame = await verifyCtx.VideoGames.FindAsync(game.Id);
 
@@ -91,18 +84,15 @@ public class LibraryFacadeTests : FacadeTestsBase
     [Fact]
     public async Task SaveAsync_Then_GetAsync_Returns_Saved_Library()
     {
-        // Arrange
         var model = new LibraryDetailModel
         {
             Id = Guid.Empty,
             Name = "My Library"
         };
 
-        // Act
         var saved = await _libraryFacade.SaveAsync(model);
         var loaded = await _libraryFacade.GetAsync(saved.Id);
 
-        // Assert
         Assert.NotNull(loaded);
         Assert.Equal("My Library", loaded!.Name);
     }
