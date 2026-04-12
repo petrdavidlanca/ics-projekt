@@ -22,13 +22,16 @@ public class Repository<TEntity>(DbContext dbContext, IEntityMapper<TEntity> ent
     {
         TEntity? existEntity = await GetByIdAsync(entity.Id, cancellationToken).ConfigureAwait(false);
 
-        if (existEntity != null)
+        if (existEntity == null)
         {
-            entityMapper.MapToExistingEntity(existEntity, entity);
+            throw new InvalidOperationException($"Entity {typeof(TEntity).Name} with ID {entity.Id} not found.");
         }
 
-        return entity;
+        entityMapper.MapToExistingEntity(existEntity, entity);
+
+        return existEntity; 
     }
+
 
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
