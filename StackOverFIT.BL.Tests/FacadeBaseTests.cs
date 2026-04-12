@@ -30,7 +30,6 @@ public class FacadeBaseTests
     {
         public string Value { get; set; } = string.Empty;
 
-        // Kolekce pro test GuardCollectionsAreNotSet
         public List<string> Tags { get; set; } = new();
     }
 
@@ -61,11 +60,12 @@ public class FacadeBaseTests
 
     private class FakeRepository : IRepository<TestEntity>
     {
+
         public readonly List<TestEntity> Storage = new();
 
         public IQueryable<TestEntity> Get() => Storage.AsQueryable();
 
-        public Task<TestEntity?> GetByIdAsync(Guid id)
+        public Task<TestEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
             => Task.FromResult(Storage.FirstOrDefault(e => e.Id == id));
 
         public TestEntity Insert(TestEntity entity)
@@ -74,7 +74,7 @@ public class FacadeBaseTests
             return entity;
         }
 
-        public Task<TestEntity> UpdateAsync(TestEntity entity)
+        public Task<TestEntity> UpdateAsync(TestEntity entity, CancellationToken cancellationToken = default)
         {
             var existing = Storage.FirstOrDefault(e => e.Id == entity.Id)
                 ?? throw new InvalidOperationException();
@@ -83,7 +83,7 @@ public class FacadeBaseTests
             return Task.FromResult(existing);
         }
 
-        public Task DeleteAsync(Guid id)
+        public Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
         {
             var existing = Storage.FirstOrDefault(e => e.Id == id);
             if (existing != null)
@@ -92,7 +92,7 @@ public class FacadeBaseTests
             return Task.CompletedTask;
         }
 
-        public ValueTask<bool> ExistsAsync(TestEntity entity)
+        public ValueTask<bool> ExistsAsync(TestEntity entity, CancellationToken cancellationToken = default)
             => ValueTask.FromResult(Storage.Any(e => e.Id == entity.Id));
     }
 
