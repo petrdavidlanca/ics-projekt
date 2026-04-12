@@ -10,5 +10,6 @@ public class VideoGameEntityMapper : IEntityMapper<VideoGameEntity>
         existingEntity.Description = newEntity.Description;
         existingEntity.PegiRating = newEntity.PegiRating;
         existingEntity.ImageUrl = newEntity.ImageUrl;
+        existingEntity.LibraryId = newEntity.LibraryId;
     }
 }

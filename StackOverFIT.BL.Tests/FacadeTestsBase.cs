@@ -1,9 +1,10 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using StackOverFIT.BL.Mappers;
 using StackOverFIT.DAL;
 using StackOverFIT.DAL.Factories;
+using StackOverFIT.DAL.Mappers;
 using StackOverFIT.DAL.UnitOfWork;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -11,7 +12,6 @@ namespace StackOverFIT.BL.Tests;
 
 public class FacadeTestsBase : IAsyncLifetime
 {
-
     protected FacadeTestsBase(ITestOutputHelper output)
     {
         var databaseName = $"{GetType().FullName}_{Guid.NewGuid():N}.db";
@@ -19,11 +19,33 @@ public class FacadeTestsBase : IAsyncLifetime
         DbContextFactory = new DbContextSqLiteFactory(databaseName);
         StackOverFITDbContextSUT = DbContextFactory.CreateDbContext();
 
+        // 🔧 DI container
+        var services = new ServiceCollection();
+
+        // DbContext factory
+        services.AddSingleton<IDbContextFactory<StackOverFITDbContext>>(DbContextFactory);
+
+        // DAL entity mappers
+        services.AddTransient<LibraryEntityMapper>();
+        services.AddTransient<VideoGameEntityMapper>();
+        services.AddTransient<UserEntityMapper>();
+
+        // Repositories + UoW
+        services.AddScoped<IUnitOfWorkFactory, UnitOfWorkFactory>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+        // Needed for UnitOfWorkFactory
+        services.AddScoped<IServiceScopeFactory>(sp => sp.GetRequiredService<IServiceScopeFactory>());
+
+        var provider = services.BuildServiceProvider();
+
+        ServiceScopeFactory = provider.GetRequiredService<IServiceScopeFactory>();
+        UnitOfWorkFactory = new UnitOfWorkFactory(DbContextFactory, ServiceScopeFactory);
+
+        // BL mappers
         LibraryModelMapper = new LibraryModelMapper();
         UserModelMapper = new UserModelMapper();
         VideoGameModelMapper = new VideoGameModelMapper();
-
-        UnitOfWorkFactory = new UnitOfWorkFactory(DbContextFactory, ServiceScopeFactory);
     }
 
     protected IDbContextFactory<StackOverFITDbContext> DbContextFactory { get; }
@@ -33,7 +55,7 @@ public class FacadeTestsBase : IAsyncLifetime
     protected LibraryModelMapper LibraryModelMapper { get; }
     protected UserModelMapper UserModelMapper { get; }
     protected VideoGameModelMapper VideoGameModelMapper { get; }
-    protected UnitOfWorkFactory UnitOfWorkFactory { get; }
+    protected IUnitOfWorkFactory UnitOfWorkFactory { get; }
 
     public async Task InitializeAsync()
     {
@@ -47,3 +69,4 @@ public class FacadeTestsBase : IAsyncLifetime
         await StackOverFITDbContextSUT.DisposeAsync();
     }
 }
+
