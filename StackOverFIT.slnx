@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/App/">
     <File Path="global.json" />
+    <Project Path="StackOverFIT.App/StackOverFIT.App.csproj" />
     <Project Path="StackOverFIT.BL/StackOverFIT.BL.csproj" Id="b0872769-018d-4959-a208-7beb64994598" />
     <Project Path="StackOverFIT.DAL/StackOverFIT.DAL.csproj" />
   </Folder>
