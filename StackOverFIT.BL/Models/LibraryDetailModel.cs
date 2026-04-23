@@ -1,5 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using System;
 
 namespace StackOverFIT.BL.Models;
 
@@ -13,6 +12,9 @@ public partial class LibraryDetailModel : ModelBase
 
     [ObservableProperty]
     public partial int NumOfGames { get; set; }
+
+    [ObservableProperty]
+    public partial System.Collections.ObjectModel.ObservableCollection<VideoGameListModel> VideoGames { get; set; } = new();
 
     public static LibraryDetailModel Empty => new()
     {
