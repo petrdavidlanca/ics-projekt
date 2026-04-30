@@ -34,11 +34,13 @@ public class DbContextVideoGameTests(ITestOutputHelper output) : DbContextTestsB
         Assert.Equal(
             entity with 
             { 
-                GameGenres = Array.Empty<GameGenres>() 
+                GameGenres = Array.Empty<GameGenres>(),
+                Libraries = Array.Empty<LibraryEntity>()
             },
             actual_entity with 
             { 
-                GameGenres = Array.Empty<GameGenres>() 
+                GameGenres = Array.Empty<GameGenres>(),
+                Libraries = Array.Empty<LibraryEntity>()
             }
         );
     }
@@ -75,8 +77,8 @@ public class DbContextVideoGameTests(ITestOutputHelper output) : DbContextTestsB
         var actual_entity = await db_assert.VideoGames.SingleAsync(i => i.Id == game_id);
 
         Assert.Equal(
-            entity_to_update with { GameGenres = Array.Empty<GameGenres>() },
-            actual_entity with { GameGenres = Array.Empty<GameGenres>() }
+            entity_to_update with { GameGenres = Array.Empty<GameGenres>(), Libraries = Array.Empty<LibraryEntity>() },
+            actual_entity with { GameGenres = Array.Empty<GameGenres>(), Libraries = Array.Empty<LibraryEntity>() }
         );
     }
 

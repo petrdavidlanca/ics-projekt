@@ -29,6 +29,7 @@ public class FacadeTestsBase : IAsyncLifetime
         services.AddTransient<LibraryEntityMapper>();
         services.AddTransient<VideoGameEntityMapper>();
         services.AddTransient<UserEntityMapper>();
+        services.AddTransient<LibraryVideoGameEntityMapper>();
 
         // Repositories + UoW
         services.AddScoped<IUnitOfWorkFactory, UnitOfWorkFactory>();
