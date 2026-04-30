@@ -26,7 +26,6 @@ public class VideoGameModelMapper : ModelMapperBase<VideoGameEntity, VideoGameLi
                 Description = entity.Description,
                 PegiRating = entity.PegiRating,
                 ImageUrl = entity.ImageUrl,
-                LibraryId = entity.LibraryId,
                 GameGenres = new ObservableCollection<DAL.Enums.GameGenres>(entity.GameGenres)
             };
 
@@ -38,7 +37,6 @@ public class VideoGameModelMapper : ModelMapperBase<VideoGameEntity, VideoGameLi
             Description = model.Description,
             PegiRating = model.PegiRating,
             ImageUrl = model.ImageUrl,
-            LibraryId = model.LibraryId,
             GameGenres = model.GameGenres.ToList()
         };
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestPlatform.Utilities;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.TestPlatform.Utilities;
 using StackOverFIT.BL.Facades;
 using StackOverFIT.BL.Models;
 using StackOverFIT.DAL.Entities;
@@ -44,10 +45,12 @@ public class LibraryFacadeTests : FacadeTestsBase
         await _libraryFacade.AddVideoGameAsync(library.Id, game.Id);
 
         await using var verifyCtx = DbContextFactory.CreateDbContext();
-        var updatedGame = await verifyCtx.VideoGames.FindAsync(game.Id);
+        var updatedLibrary = await verifyCtx.Libraries
+            .Include(l => l.VideoGames)
+            .SingleOrDefaultAsync(l => l.Id == library.Id);
 
-        Assert.NotNull(updatedGame);
-        Assert.Equal(library.Id, updatedGame!.LibraryId);
+        Assert.NotNull(updatedLibrary);
+        Assert.Contains(updatedLibrary.VideoGames, g => g.Id == game.Id);
     }
 
     [Fact]
@@ -64,9 +67,10 @@ public class LibraryFacadeTests : FacadeTestsBase
             Id = Guid.NewGuid(),
             Name = "Cyberpunk 2077",
             Description = "Sci-fi RPG",
-            PegiRating = 18,
-            LibraryId = library.Id
+            PegiRating = 18
         };
+
+        library.VideoGames.Add(game);
 
         StackOverFITDbContextSUT.Libraries.Add(library);
         StackOverFITDbContextSUT.VideoGames.Add(game);
@@ -75,10 +79,12 @@ public class LibraryFacadeTests : FacadeTestsBase
         await _libraryFacade.RemoveVideoGameAsync(library.Id, game.Id);
 
         await using var verifyCtx = DbContextFactory.CreateDbContext();
-        var updatedGame = await verifyCtx.VideoGames.FindAsync(game.Id);
+        var updatedLibrary = await verifyCtx.Libraries
+            .Include(l => l.VideoGames)
+            .SingleOrDefaultAsync(l => l.Id == library.Id);
 
-        Assert.NotNull(updatedGame);
-        Assert.Null(updatedGame!.LibraryId);
+        Assert.NotNull(updatedLibrary);
+        Assert.DoesNotContain(updatedLibrary.VideoGames, g => g.Id == game.Id);
     }
 
     [Fact]
@@ -185,51 +191,44 @@ public class LibraryFacadeTests : FacadeTestsBase
     [Fact]
     public async Task AddVideoGameAsync_DoesNothing_When_Game_Already_Assigned()
     {
-        var library = await _libraryFacade.SaveAsync(new LibraryDetailModel { Name = "Lib" });
+        var library = new LibraryEntity { Id = Guid.NewGuid(), Name = "Lib" };
+        var game = new VideoGameEntity { Id = Guid.NewGuid(), Name = "Game", Description = "Desc", PegiRating = 12 };
 
-        var game = new VideoGameEntity
-        {
-            Id = Guid.NewGuid(),
-            Name = "Game",
-            Description = "Desc",
-            PegiRating = 12,
-            LibraryId = library.Id
-        };
+        library.VideoGames.Add(game);
 
+        StackOverFITDbContextSUT.Libraries.Add(library);
         StackOverFITDbContextSUT.VideoGames.Add(game);
         await StackOverFITDbContextSUT.SaveChangesAsync();
 
         await _libraryFacade.AddVideoGameAsync(library.Id, game.Id);
 
         await using var verifyCtx = DbContextFactory.CreateDbContext();
-        var updated = await verifyCtx.VideoGames.FindAsync(game.Id);
+        var updatedLibrary = await verifyCtx.Libraries
+            .Include(l => l.VideoGames)
+            .SingleOrDefaultAsync(l => l.Id == library.Id);
 
-        Assert.Equal(library.Id, updated!.LibraryId);
+        Assert.NotNull(updatedLibrary);
+        Assert.Single(updatedLibrary.VideoGames, g => g.Id == game.Id);
     }
 
     [Fact]
     public async Task RemoveVideoGameAsync_DoesNothing_When_Game_Already_Unassigned()
     {
-        var library = await _libraryFacade.SaveAsync(new LibraryDetailModel { Name = "Lib" });
+        var library = new LibraryEntity { Id = Guid.NewGuid(), Name = "Lib" };
+        var game = new VideoGameEntity { Id = Guid.NewGuid(), Name = "Game", Description = "Desc", PegiRating = 12 };
 
-        var game = new VideoGameEntity
-        {
-            Id = Guid.NewGuid(),
-            Name = "Game",
-            Description = "Desc",
-            PegiRating = 12,
-            LibraryId = null
-        };
-
+        StackOverFITDbContextSUT.Libraries.Add(library);
         StackOverFITDbContextSUT.VideoGames.Add(game);
         await StackOverFITDbContextSUT.SaveChangesAsync();
 
         await _libraryFacade.RemoveVideoGameAsync(library.Id, game.Id);
 
         await using var verifyCtx = DbContextFactory.CreateDbContext();
-        var updated = await verifyCtx.VideoGames.FindAsync(game.Id);
+        var updatedLibrary = await verifyCtx.Libraries
+            .Include(l => l.VideoGames)
+            .SingleOrDefaultAsync(l => l.Id == library.Id);
 
-        Assert.Null(updated!.LibraryId);
+        Assert.NotNull(updatedLibrary);
+        Assert.Empty(updatedLibrary.VideoGames);
     }
-
 }
