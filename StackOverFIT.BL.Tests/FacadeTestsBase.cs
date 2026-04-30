@@ -19,23 +19,18 @@ public class FacadeTestsBase : IAsyncLifetime
         DbContextFactory = new DbContextSqLiteFactory(databaseName);
         StackOverFITDbContextSUT = DbContextFactory.CreateDbContext();
 
-        // 🔧 DI container
         var services = new ServiceCollection();
 
-        // DbContext factory
         services.AddSingleton<IDbContextFactory<StackOverFITDbContext>>(DbContextFactory);
 
-        // DAL entity mappers
         services.AddTransient<LibraryEntityMapper>();
         services.AddTransient<VideoGameEntityMapper>();
         services.AddTransient<UserEntityMapper>();
         services.AddTransient<LibraryVideoGameEntityMapper>();
 
-        // Repositories + UoW
         services.AddScoped<IUnitOfWorkFactory, UnitOfWorkFactory>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-        // Needed for UnitOfWorkFactory
         services.AddScoped<IServiceScopeFactory>(sp => sp.GetRequiredService<IServiceScopeFactory>());
 
         var provider = services.BuildServiceProvider();
@@ -43,7 +38,6 @@ public class FacadeTestsBase : IAsyncLifetime
         ServiceScopeFactory = provider.GetRequiredService<IServiceScopeFactory>();
         UnitOfWorkFactory = new UnitOfWorkFactory(DbContextFactory, ServiceScopeFactory);
 
-        // BL mappers
         LibraryModelMapper = new LibraryModelMapper();
         UserModelMapper = new UserModelMapper();
         VideoGameModelMapper = new VideoGameModelMapper();
