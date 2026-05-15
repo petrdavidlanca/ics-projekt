@@ -30,8 +30,8 @@ public class UserModelMapper : ModelMapperBase<UserEntity, UserListModel, UserDe
             Email = entity.Email,
             RealName = entity.RealName,
             Surname = entity.Surname,
-            TotalNumOfGames = entity.TotalNumOfGames,
-            TotalNumOfLibraries = entity.TotalNumOfLibraries,
+            TotalNumOfGames = entity.GameLibrary?.Sum(lib => lib.VideoGames?.Count ?? 0) ?? 0,
+            TotalNumOfLibraries = entity.GameLibrary?.Count ?? 0,
             GameLibrary = new ObservableCollection<LibraryListModel>(libraryMapper.MapToListModel(entity.GameLibrary))
         };
     }

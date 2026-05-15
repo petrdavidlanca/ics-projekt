@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<views:ContentPageBase
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:StackOverFIT.App.Views"
+    xmlns:vm="clr-namespace:StackOverFIT.App.ViewModels"
+    xmlns:models="clr-namespace:StackOverFIT.BL.Models;assembly=StackOverFIT.BL"
+    x:DataType="vm:LibraryDetailViewModel"
+    x:Class="StackOverFIT.App.Views.Library.LibraryDetailView"
+    BackgroundColor="#1b2838">
+
+    <Grid RowDefinitions="Auto, Auto, Auto, *" Padding="40,30,40,20">
+
+        <!-- Header: EDIT + Library name + Game count -->
+        <Grid Grid.Row="0"
+              ColumnDefinitions="Auto, *, Auto, Auto"
+              ColumnSpacing="12" Margin="0,0,0,20">
+
+            <Button Grid.Column="0" Text="EDIT"
+                    BackgroundColor="#f5a623" TextColor="White"
+                    FontAttributes="Bold" FontSize="13"
+                    CornerRadius="3" HeightRequest="38"
+                    VerticalOptions="Center"
+                    Command="{Binding GoToEditCommand}" />
+
+            <Label Grid.Column="1"
+                   Text="{Binding Library.Name}"
+                   FontSize="32" TextColor="White"
+                   VerticalOptions="Center" />
+
+            <Label Grid.Column="2"
+                   Text="{Binding Library.NumOfGames, StringFormat='{0} Games'}"
+                   FontSize="24" TextColor="#c6d4df"
+                   VerticalOptions="Center" />
+
+            <!-- DELETE library -->
+            <Button Grid.Column="3" Text="DELETE"
+                    BackgroundColor="#8b1a1a" TextColor="White"
+                    FontAttributes="Bold" FontSize="13"
+                    CornerRadius="3" HeightRequest="38"
+                    VerticalOptions="Center"
+                    Command="{Binding DeleteCommand}" />
+        </Grid>
+
+        <!-- Filter / Sort / Search -->
+        <Grid Grid.Row="1"
+              ColumnDefinitions="Auto, Auto, Auto, *"
+              ColumnSpacing="8" Margin="0,0,0,16">
+            <Button Grid.Column="0" Text="Filter ▾" BackgroundColor="#3d4450"
+                    TextColor="White" FontSize="13" CornerRadius="3" HeightRequest="36" />
+            <Button Grid.Column="1" Text="Sort ▾" BackgroundColor="#3d4450"
+                    TextColor="White" FontSize="13" CornerRadius="3" HeightRequest="36" />
+            <Button Grid.Column="2" Text="Search" BackgroundColor="#1a7bc4"
+                    TextColor="White" FontSize="13" CornerRadius="3" HeightRequest="36" />
+            <Entry Grid.Column="3"
+                   Placeholder="Game name" PlaceholderColor="#7a8b99"
+                   TextColor="White" BackgroundColor="#3d5266"
+                   FontSize="13" HeightRequest="36" />
+        </Grid>
+
+        <!-- Hry v knihovně -->
+        <CollectionView Grid.Row="3" ItemsSource="{Binding Library.VideoGames}">
+            <CollectionView.EmptyView>
+                <Label Text="No games in this library yet. Use '+ ADD GAME' to add some."
+                       TextColor="#7a8b99" FontSize="14" Margin="0,20" />
+            </CollectionView.EmptyView>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:VideoGameListModel">
+                    <Grid Padding="0,4">
+                        <Frame BackgroundColor="#2a475e" BorderColor="#3d5a73"
+                               CornerRadius="4" Padding="0" HasShadow="False">
+                            <Grid ColumnDefinitions="120, *, Auto, Auto" ColumnSpacing="0">
+
+                                <Frame Grid.Column="0"
+                                       BackgroundColor="#3d5266" BorderColor="Transparent"
+                                       CornerRadius="0" Padding="0" HeightRequest="80" HasShadow="False">
+                                    <Label Text="🖼" FontSize="28"
+                                           HorizontalOptions="Center" VerticalOptions="Center"
+                                           TextColor="#6b7c8d" />
+                                </Frame>
+
+                                <Label Grid.Column="1"
+                                       Text="{Binding Name}"
+                                       TextColor="White" FontSize="16" FontAttributes="Bold"
+                                       Padding="16,0" VerticalOptions="Center" />
+
+                                <Button Grid.Column="3" Text="REMOVE"
+                                        BackgroundColor="#8b1a1a" TextColor="White"
+                                        FontAttributes="Bold" FontSize="13"
+                                        CornerRadius="3" WidthRequest="110"
+                                        Margin="0,0,12,0" VerticalOptions="Center"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:LibraryDetailViewModel}}, Path=RemoveGameCommand}"
+                                        CommandParameter="{Binding Id}" />
+                            </Grid>
+                        </Frame>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+    </Grid>
+</views:ContentPageBase>

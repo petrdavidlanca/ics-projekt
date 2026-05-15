@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<views:ContentPageBase
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:StackOverFIT.App.Views"
+    xmlns:vm="clr-namespace:StackOverFIT.App.ViewModels"
+    xmlns:models="clr-namespace:StackOverFIT.BL.Models;assembly=StackOverFIT.BL"
+    x:DataType="vm:UserDetailViewModel"
+    x:Class="StackOverFIT.App.Views.User.UserDetailView"
+    BackgroundColor="#1b2838">
+
+    <Grid RowDefinitions="Auto, *" Padding="40,30,40,20">
+
+        <!-- Hlavička s tlačítkem Log out vpravo -->
+        <Grid Grid.Row="0" ColumnDefinitions="*, Auto" Margin="0,0,0,24">
+            <Label Grid.Column="0"
+                   Text="Profile"
+                   FontSize="28" TextColor="White"
+                   VerticalOptions="Center" />
+            <Button Grid.Column="1"
+                    Text="Log out"
+                    BackgroundColor="Transparent"
+                    TextColor="#c6d4df"
+                    FontSize="14"
+                    BorderColor="#3d5a73"
+                    BorderWidth="1"
+                    CornerRadius="3"
+                    HeightRequest="34"
+                    Command="{Binding LogOutCommand}" />
+        </Grid>
+
+        <ScrollView Grid.Row="1">
+            <Grid ColumnDefinitions="280, *" ColumnSpacing="30">
+
+                <!-- Levý sloupec: avatar + info + tlačítka -->
+                <Frame Grid.Column="0"
+                       BackgroundColor="#2a475e" BorderColor="#3d5a73"
+                       CornerRadius="6" Padding="24" HasShadow="False"
+                       VerticalOptions="Start">
+                    <VerticalStackLayout Spacing="12">
+
+                        <Image Source="user_placeholder.png" WidthRequest="120" HeightRequest="120" HorizontalOptions="Center" />
+
+                        <!-- Username -->
+                        <Label Text="{Binding User.Username}"
+                               TextColor="White" FontSize="20" FontAttributes="Bold"
+                               HorizontalTextAlignment="Center" />
+
+                        <!-- Celé jméno (pokud vyplněno) -->
+                        <Label TextColor="#c6d4df" FontSize="14"
+                               HorizontalTextAlignment="Center">
+                            <Label.Text>
+                                <MultiBinding StringFormat="{}{0} {1}">
+                                    <Binding Path="User.RealName" FallbackValue="" />
+                                    <Binding Path="User.Surname" FallbackValue="" />
+                                </MultiBinding>
+                            </Label.Text>
+                        </Label>
+
+                        <!-- Email -->
+                        <Label Text="{Binding User.Email}"
+                               TextColor="#7a8b99" FontSize="13"
+                               HorizontalTextAlignment="Center" />
+
+                        <BoxView HeightRequest="1" Color="#3d5a73" Margin="0,4" />
+
+                        <!-- Statistiky -->
+                        <Grid ColumnDefinitions="*, *" ColumnSpacing="8">
+                            <VerticalStackLayout Grid.Column="0" Spacing="2" HorizontalOptions="Center">
+                                <Label Text="{Binding User.TotalNumOfGames}"
+                                       TextColor="White" FontSize="22" FontAttributes="Bold"
+                                       HorizontalTextAlignment="Center" />
+                                <Label Text="Games" TextColor="#c6d4df" FontSize="12"
+                                       HorizontalTextAlignment="Center" />
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Grid.Column="1" Spacing="2" HorizontalOptions="Center">
+                                <Label Text="{Binding User.TotalNumOfLibraries}"
+                                       TextColor="White" FontSize="22" FontAttributes="Bold"
+                                       HorizontalTextAlignment="Center" />
+                                <Label Text="Libraries" TextColor="#c6d4df" FontSize="12"
+                                       HorizontalTextAlignment="Center" />
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <BoxView HeightRequest="1" Color="#3d5a73" Margin="0,4" />
+
+                        <Button Text="EDIT PROFILE"
+                                BackgroundColor="#f5a623" TextColor="White"
+                                FontAttributes="Bold" FontSize="13"
+                                CornerRadius="3" HeightRequest="38"
+                                Command="{Binding GoToEditCommand}" />
+
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Pravý sloupec: seznam knihoven -->
+                <VerticalStackLayout Grid.Column="1" Spacing="12">
+
+                    <Label Text="My Libraries"
+                           TextColor="White" FontSize="22" FontAttributes="Bold"
+                           Margin="0,0,0,8" />
+
+                    <CollectionView ItemsSource="{Binding User.GameLibrary}">
+                        <CollectionView.EmptyView>
+                            <Label Text="No libraries yet."
+                                   TextColor="#7a8b99" FontSize="14" />
+                        </CollectionView.EmptyView>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:LibraryListModel">
+                                <Grid Padding="0,4">
+                                    <Frame BackgroundColor="#2a475e" BorderColor="#3d5a73"
+                                           CornerRadius="4" Padding="16,12" HasShadow="False">
+                                        <Grid ColumnDefinitions="*, Auto" ColumnSpacing="12">
+                                            <VerticalStackLayout Grid.Column="0" Spacing="2" VerticalOptions="Center">
+                                                <Label Text="{Binding Name}"
+                                                       TextColor="White" FontSize="15" FontAttributes="Bold" />
+                                                <Label Text="{Binding NumOfGames, StringFormat='{0} Games'}"
+                                                       TextColor="#c6d4df" FontSize="13" />
+                                            </VerticalStackLayout>
+                                            <Button Grid.Column="1" Text="OPEN"
+                                                    BackgroundColor="#1a7bc4" TextColor="White"
+                                                    FontAttributes="Bold" FontSize="12"
+                                                    CornerRadius="3" HeightRequest="34" WidthRequest="80"
+                                                    VerticalOptions="Center" />
+                                        </Grid>
+                                    </Frame>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                </VerticalStackLayout>
+
+            </Grid>
+        </ScrollView>
+
+    </Grid>
+</views:ContentPageBase>

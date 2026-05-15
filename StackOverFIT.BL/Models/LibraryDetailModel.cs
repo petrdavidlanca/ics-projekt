@@ -12,6 +12,9 @@ public partial class LibraryDetailModel : ModelBase
 
     [ObservableProperty]
     public partial int NumOfGames { get; set; }
+    
+    [ObservableProperty]
+    public partial Guid UserId { get; set; }
 
     [ObservableProperty]
     public partial System.Collections.ObjectModel.ObservableCollection<VideoGameListModel> VideoGames { get; set; } = new();
@@ -20,6 +23,7 @@ public partial class LibraryDetailModel : ModelBase
     {
         Id = Guid.Empty,
         Name = string.Empty,
-        NumOfGames = 0
+        NumOfGames = 0,
+        UserId = Guid.Empty
     };
 }

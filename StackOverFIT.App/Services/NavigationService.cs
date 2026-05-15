@@ -1,34 +1,40 @@
 ﻿using StackOverFIT.App.Models;
+using StackOverFIT.App.Views.User;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using StackOverFIT.App.Views.Library;
+using StackOverFIT.App.Views.VideoGame;
 
 namespace StackOverFIT.App.Services;
 
 public class NavigationService : INavigationService
 {
     public const string UserListRouteAbsolute = "//users";
-    public const string UserDetailRouteRelative = "/detail";
+    public const string UserDetailRouteRelative = "//app/profile/userdetail";
     public const string UserEditRouteRelative = "/edit";
 
-    public const string LibraryListRouteAbsolute = "//libraries";
+    public const string VideoGameListRouteAbsolute = "//app/store/videogames";
+    public const string VideoGameDetailRouteRelative = "/detail";
+    public const string VideoGameEditRouteRelative = "//app/creategame/newgame";
+
+    public const string LibraryListRouteAbsolute = "//app/library/libraries";
     public const string LibraryDetailRouteRelative = "/detail";
     public const string LibraryEditRouteRelative = "/edit";
 
-    public const string VideoGameListRouteAbsolute = "//videogames";
-    public const string VideoGameDetailRouteRelative = "/detail";
-    public const string VideoGameEditRouteRelative = "/edit";
-
     public IEnumerable<RouteModel> Routes { get; } = new List<RouteModel>
     {
-        /*az bude views (XAML)
-        new(UserListRouteAbsolute, typeof(UserListView)),
         new(UserListRouteAbsolute + UserDetailRouteRelative, typeof(UserDetailView)),
         new(UserListRouteAbsolute + UserEditRouteRelative, typeof(UserEditView)),
-        new(UserListRouteAbsolute + UserDetailRouteRelative + UserEditRouteRelative, typeof(UserEditView)),
+        new(UserDetailRouteRelative + UserEditRouteRelative, typeof(UserEditView)),
         
-        // + library a videogame
-        */
+        new(LibraryListRouteAbsolute + LibraryDetailRouteRelative, typeof(LibraryDetailView)),
+        new(LibraryListRouteAbsolute + LibraryEditRouteRelative, typeof(LibraryEditView)),
+        new(LibraryListRouteAbsolute + LibraryDetailRouteRelative + LibraryEditRouteRelative, typeof(LibraryEditView)),
+        
+        new(VideoGameListRouteAbsolute + VideoGameDetailRouteRelative, typeof(VideoGameDetailView)),
+        new(VideoGameListRouteAbsolute + VideoGameEditRouteRelative, typeof(VideoGameEditView)),
+        new(VideoGameListRouteAbsolute + VideoGameDetailRouteRelative + VideoGameEditRouteRelative, typeof(VideoGameEditView)),
     };
 
     public async Task GoToAsync(string route)

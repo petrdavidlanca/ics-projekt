@@ -28,7 +28,8 @@ public class LibraryModelMapper : ModelMapperBase<LibraryEntity, LibraryListMode
             Id = entity.Id,
             Name = entity.Name,
             Description = entity.Description,
-            NumOfGames = entity.NumOfGames,
+            NumOfGames = entity.VideoGames?.Count ?? 0,
+            UserId = entity.UserEntityId ?? Guid.Empty,
             VideoGames = new ObservableCollection<VideoGameListModel>(videoGameMapper.MapToListModel(entity.VideoGames))
         };
     }
@@ -40,6 +41,7 @@ public class LibraryModelMapper : ModelMapperBase<LibraryEntity, LibraryListMode
             Name = model.Name,
             Description = model.Description,
             NumOfGames = model.NumOfGames,
+            UserEntityId = model.UserId == Guid.Empty ? null : model.UserId,
             VideoGames = model.VideoGames.Select(v => new VideoGameEntity { Id = v.Id, Name = v.Name, Description = "", PegiRating = 0 }).ToList()
         };
 }

@@ -22,5 +22,12 @@ public class StackOverFITDbContext(DbContextOptions contextOptions) : DbContext(
                 j => j.HasOne(x => x.VideoGame).WithMany().HasForeignKey(x => x.VideoGameId),
                 j => j.HasOne(x => x.Library).WithMany().HasForeignKey(x => x.LibraryId)
             );
+        modelBuilder.Entity<UserEntity>()
+            .HasMany(u => u.GameLibrary)
+            .WithOne(l => l.User)
+            .HasForeignKey(l => l.UserEntityId)
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.Cascade
+            );
     }
 }

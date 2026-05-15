@@ -16,6 +16,8 @@ public partial class LibraryDetailViewModel(
     ILibraryFacade libraryFacade,
     INavigationService navigationService,
     IMessengerService messengerService,
+    IUserFacade userFacade,
+    ICurrentUserService currentUserService,
     IAlertService alertService)
     : ViewModelBase(messengerService), IRecipient<LibraryEditMessage>
 {
@@ -27,7 +29,14 @@ public partial class LibraryDetailViewModel(
     protected override async Task LoadDataAsync()
     {
         await base.LoadDataAsync();
-        Library = await libraryFacade.GetAsync(Id);
+        if (Id == Guid.Empty)
+        {
+            var user = await userFacade.GetAsync(currentUserService.CurrentUserId);
+            Id = user?.GameLibrary.FirstOrDefault()?.Id ?? Guid.Empty;
+        }
+
+        if (Id != Guid.Empty)
+            Library = await libraryFacade.GetAsync(Id);
     }
 
     [RelayCommand]
@@ -53,9 +62,21 @@ public partial class LibraryDetailViewModel(
     {
         if (Library?.Id is not null)
         {
-            await navigationService.GoToAsync("LibraryEdit",
+            await navigationService.GoToAsync(NavigationService.LibraryEditRouteRelative,
                 new Dictionary<string, object?> { ["Id"] = Library.Id });
         }
+    }
+
+    [RelayCommand]
+    private async Task RemoveVideoGameAsync(Guid videoGameId)
+    {
+        if (Library is null) return;
+
+        await libraryFacade.RemoveVideoGameAsync(Library.Id, videoGameId);
+
+        var game = Library.VideoGames.FirstOrDefault(g => g.Id == videoGameId);
+        if (game is not null)
+            Library.VideoGames.Remove(game);
     }
 
     public void Receive(LibraryEditMessage message)

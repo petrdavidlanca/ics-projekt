@@ -36,6 +36,8 @@ public partial class VideoGameEditViewModel(
 
         MessengerService.Send(new VideoGameEditMessage { VideoGameId = VideoGame.Id });
 
-        navigationService.SendBackButtonPressed();
+        await navigationService.GoToAsync(NavigationService.VideoGameListRouteAbsolute);
     }
+    [RelayCommand]
+    private void Cancel() => navigationService.SendBackButtonPressed();
 }

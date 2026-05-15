@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 namespace StackOverFIT.App.ViewModels;
 
 [QueryProperty(nameof(Id), nameof(Id))]
+[QueryProperty(nameof(UserId), nameof(UserId))]
 public partial class LibraryEditViewModel(
     ILibraryFacade libraryFacade,
     INavigationService navigationService,
@@ -17,6 +18,7 @@ public partial class LibraryEditViewModel(
     : ViewModelBase(messengerService)
 {
     public Guid Id { get; set; }
+    public Guid UserId { get; set; }
 
     [ObservableProperty]
     public partial LibraryDetailModel Library { get; set; } = LibraryDetailModel.Empty;
@@ -25,17 +27,30 @@ public partial class LibraryEditViewModel(
     {
         await base.LoadDataAsync();
 
-        Library = await libraryFacade.GetAsync(Id)
-                    ?? LibraryDetailModel.Empty;
+        if (Id != Guid.Empty)
+        {
+            var loaded = await libraryFacade.GetAsync(Id) ?? LibraryDetailModel.Empty;
+            Library = loaded;
+        }
+        else
+        {
+            Library = LibraryDetailModel.Empty;
+            Library.UserId = UserId;
+        }
     }
 
     [RelayCommand]
     private async Task SaveAsync()
     {
+        Library.VideoGames.Clear();
+
         await libraryFacade.SaveAsync(Library);
 
         MessengerService.Send(new LibraryEditMessage { LibraryId = Library.Id });
 
         navigationService.SendBackButtonPressed();
     }
+
+    [RelayCommand]
+    private void Cancel() => navigationService.SendBackButtonPressed();
 }

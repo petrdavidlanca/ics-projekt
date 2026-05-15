@@ -16,7 +16,8 @@ public partial class UserDetailViewModel(
     IUserFacade userFacade,
     INavigationService navigationService,
     IMessengerService messengerService,
-    IAlertService alertService)
+    IAlertService alertService,
+    ICurrentUserService currentUserService)
     : ViewModelBase(messengerService), IRecipient<UserEditMessage>
 {
     public Guid Id { get; set; }
@@ -27,25 +28,14 @@ public partial class UserDetailViewModel(
     protected override async Task LoadDataAsync()
     {
         await base.LoadDataAsync();
-        User = await userFacade.GetAsync(Id);
+        var userId = Id != Guid.Empty ? Id : currentUserService.CurrentUserId;
+        User = await userFacade.GetAsync(userId);
     }
 
     [RelayCommand]
-    private async Task DeleteAsync()
+    private async Task GoToLibrariesAsync()
     {
-        if (User is not null)
-        {
-            try
-            {
-                await userFacade.DeleteAsync(User.Id);
-                MessengerService.Send(new UserDeleteMessage());
-                navigationService.SendBackButtonPressed();
-            }
-            catch (InvalidOperationException)
-            {
-                await alertService.DisplayAsync("Chyba", "Uživatele se nepodařilo smazat. Pravděpodobně k němu existují navázaná data.");
-            }
-        }
+        await navigationService.GoToAsync(NavigationService.LibraryListRouteAbsolute);
     }
 
     [RelayCommand]
@@ -56,6 +46,13 @@ public partial class UserDetailViewModel(
             await navigationService.GoToAsync(NavigationService.UserEditRouteRelative,
                 new Dictionary<string, object?> { ["Id"] = User.Id });
         }
+    }
+
+    [RelayCommand]
+    private async Task LogOutAsync()
+    {
+        currentUserService.CurrentUserId = Guid.Empty;
+        await navigationService.GoToAsync(NavigationService.UserListRouteAbsolute);
     }
 
     public void Receive(UserEditMessage message)

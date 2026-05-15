@@ -53,7 +53,7 @@ public partial class VideoGameDetailViewModel(
     {
         if (VideoGame?.Id is not null)
         {
-            await navigationService.GoToAsync("VideoGameEdit",
+            await navigationService.GoToAsync(NavigationService.VideoGameEditRouteRelative,
                 new Dictionary<string, object?> { ["Id"] = VideoGame.Id });
         }
     }

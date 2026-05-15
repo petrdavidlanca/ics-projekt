@@ -14,6 +14,10 @@ namespace StackOverFIT.App.ViewModels;
 public partial class VideoGameListViewModel(
     IVideoGameFacade videoGameFacade,
     INavigationService navigationService,
+    IAlertService alertService,
+    ICurrentUserService currentUserService,
+    IUserFacade userFacade,
+    ILibraryFacade libraryFacade,
     IMessengerService messengerService)
     : ViewModelBase(messengerService), IRecipient<VideoGameEditMessage>, IRecipient<VideoGameDeleteMessage>
 {
@@ -28,13 +32,40 @@ public partial class VideoGameListViewModel(
 
     [RelayCommand]
     private async Task GoToDetailAsync(Guid id)
-        => await navigationService.GoToAsync("VideoGameDetail",
+        => await navigationService.GoToAsync(NavigationService.VideoGameDetailRouteRelative,
             new Dictionary<string, object?> { ["Id"] = id });
 
     [RelayCommand]
     private async Task GoToCreateAsync()
     {
-        await navigationService.GoToAsync("VideoGameEdit");
+        await navigationService.GoToAsync(NavigationService.VideoGameEditRouteRelative);
+    }
+
+    [RelayCommand]
+    private async Task AddToLibraryAsync(Guid gameId)
+    {
+        // Načti knihovny přihlášeného uživatele
+        var user = await userFacade.GetAsync(currentUserService.CurrentUserId);
+        var libraries = user?.GameLibrary.ToList() ?? [];
+
+        if (libraries.Count == 0)
+        {
+            await alertService.DisplayAsync("No libraries", "Create a library first in the Library tab.");
+            return;
+        }
+
+        // Nativní action sheet se seznamem knihoven
+        var libraryNames = libraries.Select(l => l.Name).ToArray();
+        var selected = await Shell.Current.DisplayActionSheet(
+            "Add to library", "Cancel", null, libraryNames);
+
+        if (selected is null || selected == "Cancel")
+            return;
+
+        var library = libraries.First(l => l.Name == selected);
+        await libraryFacade.AddVideoGameAsync(library.Id, gameId);
+
+        await alertService.DisplayAsync("Done", $"Game added to \"{library.Name}\".");
     }
 
     public void Receive(VideoGameEditMessage message) => ForceDataRefreshOnNextAppearing();

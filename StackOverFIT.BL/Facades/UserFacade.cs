@@ -15,6 +15,19 @@ public class UserFacade(
     : FacadeBase<UserEntity, UserListModel, UserDetailModel, UserEntityMapper>(
         unitOfWorkFactory, modelMapper), IUserFacade
 {
+    public override async Task<UserDetailModel?> GetAsync(Guid id)
+    {
+        await using IUnitOfWork uow = UnitOfWorkFactory.Create();
+
+        var entity = await uow.GetRepository<UserEntity, UserEntityMapper>()
+            .Get()
+            .Include(u => u.GameLibrary)
+            .FirstOrDefaultAsync(u => u.Id == id)
+            .ConfigureAwait(false);
+        return entity is null
+            ? null
+            : ModelMapper.MapToDetailModel(entity);
+    }
     public async Task<IEnumerable<UserListModel>> GetFilteredUsersAsync(string? searchTerm, string? sortBy, bool ascending = true)
     {
         await using IUnitOfWork uow = UnitOfWorkFactory.Create();

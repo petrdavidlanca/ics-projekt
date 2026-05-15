@@ -13,10 +13,12 @@ namespace StackOverFIT.App.ViewModels;
 public partial class UserEditViewModel(
     IUserFacade userFacade,
     INavigationService navigationService,
+    IAlertService alertService,
     IMessengerService messengerService)
     : ViewModelBase(messengerService)
 {
     public Guid Id { get; set; }
+    public bool IsExistingUser => Id != Guid.Empty;
 
     [ObservableProperty]
     public partial UserDetailModel User { get; set; } = UserDetailModel.Empty;
@@ -32,10 +34,33 @@ public partial class UserEditViewModel(
     [RelayCommand]
     private async Task SaveAsync()
     {
+        if (string.IsNullOrWhiteSpace(User.Username) || string.IsNullOrWhiteSpace(User.Email))
+        {
+            await alertService.DisplayAsync(
+                "Missing",
+                "Username or email."
+                );
+            return;
+        }
+
+        if (!User.Email.ToString().Contains('@'))
+        {
+            await alertService.DisplayAsync(
+            "Wrong email",
+            "Email missing '@'"
+                );
+            return;
+        }
         await userFacade.SaveAsync(User);
 
         MessengerService.Send(new UserEditMessage { UserId = User.Id });
 
+        navigationService.SendBackButtonPressed();
+    }
+
+    [RelayCommand]
+    private void Cancel()
+    {
         navigationService.SendBackButtonPressed();
     }
 }
