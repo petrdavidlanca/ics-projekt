@@ -18,7 +18,16 @@ public partial class VideoGameEditViewModel(
     : ViewModelBase(messengerService)
 
 {
-    public Guid Id { get; set; }
+    [ObservableProperty]
+    private Guid _id;
+
+    partial void OnIdChanged(Guid value)
+    {
+        if (value != Guid.Empty)
+        {
+            MainThread.BeginInvokeOnMainThread(async () => await LoadDataAsync());
+        }
+    }
 
     [ObservableProperty]
     public partial VideoGameDetailModel VideoGame { get; set; } = VideoGameDetailModel.Empty;
@@ -36,6 +45,11 @@ public partial class VideoGameEditViewModel(
     [RelayCommand]
     private async Task SaveAsync()
     {
+        if (Id != Guid.Empty)
+        {
+            VideoGame.Id = Id;
+        }
+
         await videoGameFacade.SaveAsync(VideoGame);
 
         MessengerService.Send(new VideoGameEditMessage { VideoGameId = VideoGame.Id });
