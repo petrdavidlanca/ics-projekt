@@ -65,4 +65,10 @@ public partial class VideoGameDetailViewModel(
             ForceDataRefreshOnNextAppearing();
         }
     }
+
+    [RelayCommand]
+    private async Task PlayAsync()
+    {
+        await alertService.DisplayAsync("Play", "Game launched!");
+    }
 }

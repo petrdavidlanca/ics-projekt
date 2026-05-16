@@ -44,6 +44,12 @@
 
                         <VerticalStackLayout Grid.Row="1" Grid.Column="1"
                                             Spacing="10" Padding="12,16" VerticalOptions="Start">
+                            <Button Text="PLAY" 
+                                    Command="{Binding PlayCommand}" 
+                                    BackgroundColor="#208aff" 
+                                    TextColor="White" 
+                                    FontAttributes="Bold" FontSize="13"
+                                    CornerRadius="3" HeightRequest="38" WidthRequest="120"
                             <Button Text="EDIT"
                                     BackgroundColor="#f5a623" TextColor="White"
                                     FontAttributes="Bold" FontSize="13"
