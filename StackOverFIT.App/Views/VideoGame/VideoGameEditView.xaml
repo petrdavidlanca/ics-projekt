@@ -33,18 +33,12 @@
                         <VerticalStackLayout Spacing="4">
                             <Label Text="PEGI Rating *" TextColor="#c6d4df" FontSize="12" />
                             <Picker Title="Select PEGI rating"
+                                    ItemsSource="{Binding AvailablePegiRatings}"
                                     SelectedItem="{Binding VideoGame.PegiRating}" 
                                     TextColor="White"
                                     TitleColor="#7a8b99"
                                     BackgroundColor="#3d5266"
                                     FontSize="14">
-                                <Picker.Items>
-                                    <x:String>3</x:String>
-                                    <x:String>7</x:String>
-                                    <x:String>12</x:String>
-                                    <x:String>16</x:String>
-                                    <x:String>18</x:String>
-                                </Picker.Items>
                             </Picker>
                         </VerticalStackLayout>
 

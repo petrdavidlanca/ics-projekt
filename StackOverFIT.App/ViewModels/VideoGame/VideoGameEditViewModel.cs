@@ -5,6 +5,7 @@ using StackOverFIT.App.Services;
 using StackOverFIT.BL.Facades;
 using StackOverFIT.BL.Models;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace StackOverFIT.App.ViewModels;
@@ -15,11 +16,14 @@ public partial class VideoGameEditViewModel(
     INavigationService navigationService,
     IMessengerService messengerService)
     : ViewModelBase(messengerService)
+
 {
     public Guid Id { get; set; }
 
     [ObservableProperty]
     public partial VideoGameDetailModel VideoGame { get; set; } = VideoGameDetailModel.Empty;
+
+    public List<int> AvailablePegiRatings { get; } = new List<int> { 3, 7, 12, 16, 18 };
 
     protected override async Task LoadDataAsync()
     {
