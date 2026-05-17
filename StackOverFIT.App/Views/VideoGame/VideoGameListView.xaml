@@ -70,16 +70,6 @@
     
                                     <Label Text="{Binding Name}"
                                            TextColor="White" FontSize="16" FontAttributes="Bold" />
-    
-                                    <Border BackgroundColor="#f5a200" StrokeThickness="0" 
-                                            HorizontalOptions="Start" Padding="6,2">
-                                        <Border.StrokeShape>
-                                            <RoundRectangle CornerRadius="2" />
-                                        </Border.StrokeShape>
-                                        <Label Text="{Binding PegiRating, StringFormat='{0}+'}" 
-                                               TextColor="White" FontSize="11" FontAttributes="Bold" />
-                                    </Border>
-
                                 </VerticalStackLayout>
 
                                 <Button Grid.Column="2" Text="+ ADD"

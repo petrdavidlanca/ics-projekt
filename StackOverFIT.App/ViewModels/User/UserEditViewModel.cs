@@ -43,7 +43,7 @@ public partial class UserEditViewModel(
             return;
         }
 
-        if (!User.Email.ToString().Contains('@'))
+        if (!User.Email.Contains('@'))
         {
             await alertService.DisplayAsync(
             "Wrong email",

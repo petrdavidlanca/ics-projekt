@@ -14,6 +14,7 @@ namespace StackOverFIT.App.ViewModels;
 public partial class VideoGameEditViewModel(
     IVideoGameFacade videoGameFacade,
     INavigationService navigationService,
+    IAlertService alertService,
     IMessengerService messengerService)
     : ViewModelBase(messengerService)
 
@@ -50,6 +51,13 @@ public partial class VideoGameEditViewModel(
             VideoGame.Id = Id;
         }
 
+        if (string.IsNullOrWhiteSpace(VideoGame.Name)
+            || string.IsNullOrWhiteSpace(VideoGame.Description) 
+            || VideoGame.PegiRating <= 0)
+        {
+            await alertService.DisplayAsync("Missing","Name, Description or Pegi rating");
+            return;
+        }
         await videoGameFacade.SaveAsync(VideoGame);
 
         MessengerService.Send(new VideoGameEditMessage { VideoGameId = VideoGame.Id });

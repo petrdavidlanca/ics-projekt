@@ -49,7 +49,7 @@
                                     BackgroundColor="#208aff" 
                                     TextColor="White" 
                                     FontAttributes="Bold" FontSize="13"
-                                    CornerRadius="3" HeightRequest="38" WidthRequest="120"
+                                    CornerRadius="3" HeightRequest="38" WidthRequest="120" />
                             <Button Text="EDIT"
                                     BackgroundColor="#f5a623" TextColor="White"
                                     FontAttributes="Bold" FontSize="13"
