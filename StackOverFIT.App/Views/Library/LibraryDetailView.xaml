@@ -7,7 +7,8 @@
     xmlns:models="clr-namespace:StackOverFIT.BL.Models;assembly=StackOverFIT.BL"
     x:DataType="vm:LibraryDetailViewModel"
     x:Class="StackOverFIT.App.Views.Library.LibraryDetailView"
-    BackgroundColor="#1b2838">
+    BackgroundColor="#1b2838"
+    x:Name="RootPage">
 
     <Grid RowDefinitions="Auto, Auto, Auto, *" Padding="40,30,40,20">
 
@@ -89,7 +90,7 @@
                                         FontAttributes="Bold" FontSize="13"
                                         CornerRadius="3" WidthRequest="110"
                                         Margin="0,0,12,0" VerticalOptions="Center"
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:LibraryDetailViewModel}}, Path=RemoveGameCommand}"
+                                        Command="{Binding BindingContext.RemoveVideoGameCommand, Source={x:Reference RootPage}}"
                                         CommandParameter="{Binding Id}" />
                             </Grid>
                         </Frame>

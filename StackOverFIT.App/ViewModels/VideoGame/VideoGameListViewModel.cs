@@ -44,7 +44,6 @@ public partial class VideoGameListViewModel(
     [RelayCommand]
     private async Task AddToLibraryAsync(Guid gameId)
     {
-        // Načti knihovny přihlášeného uživatele
         var user = await userFacade.GetAsync(currentUserService.CurrentUserId);
         var libraries = user?.GameLibrary.ToList() ?? [];
 
@@ -54,7 +53,6 @@ public partial class VideoGameListViewModel(
             return;
         }
 
-        // Nativní action sheet se seznamem knihoven
         var libraryNames = libraries.Select(l => l.Name).ToArray();
         var selected = await Shell.Current.DisplayActionSheet(
             "Add to library", "Cancel", null, libraryNames);
