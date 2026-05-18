@@ -20,10 +20,13 @@
               ColumnDefinitions="Auto, Auto, Auto, *"
               ColumnSpacing="8" Margin="0,0,0,16">
             <Button Grid.Column="0" Text="Filter ▾" BackgroundColor="#3d4450"
-                    TextColor="White" FontSize="13" CornerRadius="3" HeightRequest="36" />
+                    TextColor="White" FontSize="13" CornerRadius="3" HeightRequest="36"
+                    Command="{Binding ToggleFilterMenuCommand}" />
+
             <Button Grid.Column="1" Text="Sort" BackgroundColor="#3d4450"
                     TextColor="White" FontSize="13" CornerRadius="3" HeightRequest="36"
                     Command="{Binding SortCommand}" />
+
             <Button Grid.Column="2" Text="Search" BackgroundColor="#1a7bc4"
                     TextColor="White" FontSize="13" CornerRadius="3" HeightRequest="36" />
             <Entry Grid.Column="3"
@@ -68,7 +71,7 @@
                                 </Border>
 
                                 <VerticalStackLayout Grid.Column="1" Spacing="4" Padding="16,0" VerticalOptions="Center">
-    
+
                                     <Label Text="{Binding Name}"
                                            TextColor="White" FontSize="16" FontAttributes="Bold" />
                                 </VerticalStackLayout>
@@ -87,6 +90,34 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+
+        <Border Grid.Row="2"
+                IsVisible="{Binding IsFilterMenuVisible}"
+                BackgroundColor="#2a475e"
+                Stroke="#3d5a73"
+                StrokeThickness="1"
+                WidthRequest="180"
+                HorizontalOptions="Start"
+                VerticalOptions="Start"
+                Margin="0, -5, 0, 0" 
+                ZIndex="10">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="4" />
+            </Border.StrokeShape>
+
+            <HorizontalStackLayout Padding="12, 8">
+                <CheckBox IsChecked="{Binding ShowAdultGames}" Color="#1a7bc4" />
+                <Label Text="Show 18+ Games" 
+                       TextColor="White" 
+                       FontSize="13"
+                       VerticalOptions="Center" 
+                       Margin="8,0,0,0">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ToggleFilterMenuCommand}" />
+                    </Label.GestureRecognizers>
+                </Label>
+            </HorizontalStackLayout>
+        </Border>
 
     </Grid>
 </views:ContentPageBase>

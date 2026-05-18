@@ -7,6 +7,7 @@ using StackOverFIT.BL.Facades;
 using StackOverFIT.BL.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace StackOverFIT.App.ViewModels;
@@ -24,10 +25,22 @@ public partial class VideoGameListViewModel(
     [ObservableProperty]
     public partial IEnumerable<VideoGameListModel> VideoGames { get; set; } = [];
 
+    [ObservableProperty]
+    private bool isSortMenuVisible;
+
+    [ObservableProperty]
+    private bool isFilterMenuVisible;
+
+    [ObservableProperty]
+    private bool showAdultGames = true;
+
+    private string currentSortBy = "name";
+    private bool currentAscending = true;
+
     protected override async Task LoadDataAsync()
     {
         await base.LoadDataAsync();
-        VideoGames = await videoGameFacade.GetAsync();
+        await RefreshListAsync();
     }
 
     [RelayCommand]
@@ -68,38 +81,51 @@ public partial class VideoGameListViewModel(
     }
 
     [RelayCommand]
+    private void ToggleSortMenu()
+    {
+        IsSortMenuVisible = !IsSortMenuVisible;
+        IsFilterMenuVisible = false;
+    }
+
+    [RelayCommand]
+    private void ToggleFilterMenu()
+    {
+        IsFilterMenuVisible = !IsFilterMenuVisible;
+        IsSortMenuVisible = false;
+    }
+
+    partial void OnShowAdultGamesChanged(bool value)
+    {
+        MainThread.BeginInvokeOnMainThread(async () => await RefreshListAsync());
+    }
+
+    [RelayCommand]
     private async Task SortAsync()
     {
-        string[] options = { "Name (A-Z)", "Name (Z-A)", "PEGI Rating (Low-High)", "PEGI Rating (High-Low)" };
+        string[] options = { "Name (A-Z)", "Name (Z-A)", "PEGI Rating (Low-High)", "PEGI Rating (High-Low)", "Newest first", "Oldest first" };
         string? selected = await Shell.Current.DisplayActionSheet("Sort games by", "Cancel", null, options);
 
         if (selected is null || selected == "Cancel")
             return;
 
-        string sortBy = "name";
-        bool ascending = true;
-
         switch (selected)
         {
-            case "Name (A-Z)":
-                sortBy = "name";
-                ascending = true;
-                break;
-            case "Name (Z-A)":
-                sortBy = "name";
-                ascending = false;
-                break;
-            case "Rating (Low-High)":
-                sortBy = "rating";
-                ascending = true;
-                break;
-            case "Rating (High-Low)":
-                sortBy = "rating";
-                ascending = false;
-                break;
+            case "Name (A-Z)": currentSortBy = "name"; currentAscending = true; break;
+            case "Name (Z-A)": currentSortBy = "name"; currentAscending = false; break;
+            case "PEGI Rating (Low-High)": currentSortBy = "rating"; currentAscending = true; break;
+            case "PEGI Rating (High-Low)": currentSortBy = "rating"; currentAscending = false; break;
+            case "Newest first": currentSortBy = "date"; currentAscending = false; break;
+            case "Oldest first": currentSortBy = "date"; currentAscending = true; break;
         }
 
-        VideoGames = await videoGameFacade.GetFilteredGamesAsync(null, sortBy, ascending, null);
+        await RefreshListAsync();
+    }
+
+    private async Task RefreshListAsync()
+    {
+        int? maxPegi = ShowAdultGames ? null : 16;
+
+        VideoGames = await videoGameFacade.GetFilteredGamesAsync(null, currentSortBy, currentAscending, maxPegi);
     }
 
     public void Receive(VideoGameEditMessage message) => ForceDataRefreshOnNextAppearing();

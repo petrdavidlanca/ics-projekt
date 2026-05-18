@@ -35,6 +35,7 @@ public class VideoGameFacade(
         {
             "name" => ascending ? query.OrderBy(g => g.Name) : query.OrderByDescending(g => g.Name),
             "rating" => ascending ? query.OrderBy(g => g.PegiRating) : query.OrderByDescending(g => g.PegiRating),
+            "date" => ascending ? query.OrderBy(g => g.CreatedAt) : query.OrderByDescending(g => g.CreatedAt),
             _ => query.OrderBy(g => g.Name)
         };
 
