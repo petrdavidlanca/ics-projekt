@@ -38,7 +38,8 @@ public partial class VideoGameListViewModel(
     [RelayCommand]
     private async Task GoToCreateAsync()
     {
-        await navigationService.GoToAsync(NavigationService.VideoGameEditRouteRelative);
+        await navigationService.GoToAsync(NavigationService.VideoGameEditRouteRelative,
+            new Dictionary<string, object?> { ["Id"] = Guid.Empty });
     }
 
     [RelayCommand]

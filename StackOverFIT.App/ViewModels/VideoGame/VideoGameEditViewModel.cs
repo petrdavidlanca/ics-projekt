@@ -28,6 +28,10 @@ public partial class VideoGameEditViewModel(
         {
             MainThread.BeginInvokeOnMainThread(async () => await LoadDataAsync());
         }
+        else
+        {
+            VideoGame = VideoGameDetailModel.Empty;
+        }
     }
 
     [ObservableProperty]
@@ -51,19 +55,21 @@ public partial class VideoGameEditViewModel(
             VideoGame.Id = Id;
         }
 
-        if (string.IsNullOrWhiteSpace(VideoGame.Name)
-            || string.IsNullOrWhiteSpace(VideoGame.Description) 
-            || VideoGame.PegiRating <= 0)
-        {
-            await alertService.DisplayAsync("Missing","Name, Description or Pegi rating");
-            return;
-        }
         await videoGameFacade.SaveAsync(VideoGame);
-
         MessengerService.Send(new VideoGameEditMessage { VideoGameId = VideoGame.Id });
+
+        VideoGame = VideoGameDetailModel.Empty;
+        Id = Guid.Empty;
 
         await navigationService.GoToAsync(NavigationService.VideoGameListRouteAbsolute);
     }
+
     [RelayCommand]
-    private void Cancel() => navigationService.SendBackButtonPressed();
+    private void Cancel()
+    {
+        VideoGame = VideoGameDetailModel.Empty;
+        Id = Guid.Empty;
+
+        navigationService.SendBackButtonPressed();
+    }
 }
