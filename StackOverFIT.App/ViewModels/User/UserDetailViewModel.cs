@@ -18,7 +18,12 @@ public partial class UserDetailViewModel(
     IMessengerService messengerService,
     IAlertService alertService,
     ICurrentUserService currentUserService)
-    : ViewModelBase(messengerService), IRecipient<UserEditMessage>
+    : ViewModelBase(messengerService),
+      IRecipient<UserEditMessage>,
+      IRecipient<LibraryEditMessage>,
+      IRecipient<LibraryDeleteMessage>,
+      IRecipient<VideoGameEditMessage>,
+      IRecipient<VideoGameDeleteMessage> 
 {
     public Guid Id { get; set; }
 
@@ -62,4 +67,9 @@ public partial class UserDetailViewModel(
             ForceDataRefreshOnNextAppearing();
         }
     }
+
+    public void Receive(LibraryEditMessage message) => ForceDataRefreshOnNextAppearing();
+    public void Receive(LibraryDeleteMessage message) => ForceDataRefreshOnNextAppearing();
+    public void Receive(VideoGameEditMessage message) => ForceDataRefreshOnNextAppearing();
+    public void Receive(VideoGameDeleteMessage message) => ForceDataRefreshOnNextAppearing();
 }

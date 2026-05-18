@@ -14,7 +14,10 @@ namespace StackOverFIT.App.ViewModels;
 public partial class LibraryEditViewModel(
     ILibraryFacade libraryFacade,
     INavigationService navigationService,
-    IMessengerService messengerService)
+    IMessengerService messengerService,
+    IAlertService alertService,
+    IUserFacade userFacade,
+    ICurrentUserService currentUserService)
     : ViewModelBase(messengerService)
 {
     public Guid Id { get; set; }
@@ -42,13 +45,43 @@ public partial class LibraryEditViewModel(
     [RelayCommand]
     private async Task SaveAsync()
     {
-        Library.VideoGames.Clear();
+        if (!string.IsNullOrEmpty(Library.Name))
+        {
+            Library.Name = Library.Name.Trim();
+        }
+
+        if (string.IsNullOrWhiteSpace(Library.Name))
+        {
+            await alertService.DisplayAsync("Validation Error", "Please enter a name for the library.");
+            return;
+        }
+
+        var user = await userFacade.GetAsync(currentUserService.CurrentUserId);
+        var existingLibraries = user?.GameLibrary ?? [];
+
+        bool isDuplicate = existingLibraries.Any(l =>
+            l.Name.Equals(Library.Name, StringComparison.OrdinalIgnoreCase) &&
+            l.Id != Library.Id);
+
+        if (isDuplicate)
+        {
+            await alertService.DisplayAsync("Validation Error", $"You already have a library named '{Library.Name}'.");
+            return;
+        }
+
+        if (Id != Guid.Empty)
+        {
+            Library.Id = Id;
+        }
 
         await libraryFacade.SaveAsync(Library);
 
         MessengerService.Send(new LibraryEditMessage { LibraryId = Library.Id });
 
-        navigationService.SendBackButtonPressed();
+        Library = LibraryDetailModel.Empty;
+        Id = Guid.Empty;
+
+        await navigationService.GoToAsync(NavigationService.LibraryListRouteAbsolute);
     }
 
     [RelayCommand]
