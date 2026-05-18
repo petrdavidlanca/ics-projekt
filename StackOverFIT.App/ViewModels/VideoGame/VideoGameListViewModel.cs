@@ -125,7 +125,21 @@ public partial class VideoGameListViewModel(
     {
         int? maxPegi = ShowAdultGames ? null : 16;
 
-        VideoGames = await videoGameFacade.GetFilteredGamesAsync(null, currentSortBy, currentAscending, maxPegi);
+        VideoGames = await videoGameFacade.GetFilteredGamesAsync(SearchText, currentSortBy, currentAscending, maxPegi);
+    }
+
+    [ObservableProperty]
+    private string searchText = string.Empty;
+
+    partial void OnSearchTextChanged(string value)
+    {
+        MainThread.BeginInvokeOnMainThread(async () => await RefreshListAsync());
+    }
+
+    [RelayCommand]
+    private async Task SearchAsync()
+    {
+        await RefreshListAsync();
     }
 
     public void Receive(VideoGameEditMessage message) => ForceDataRefreshOnNextAppearing();

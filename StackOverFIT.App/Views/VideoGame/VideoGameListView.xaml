@@ -19,6 +19,7 @@
         <Grid Grid.Row="1"
               ColumnDefinitions="Auto, Auto, Auto, *"
               ColumnSpacing="8" Margin="0,0,0,16">
+            
             <Button Grid.Column="0" Text="Filter ▾" BackgroundColor="#3d4450"
                     TextColor="White" FontSize="13" CornerRadius="3" HeightRequest="36"
                     Command="{Binding ToggleFilterMenuCommand}" />
@@ -28,11 +29,15 @@
                     Command="{Binding SortCommand}" />
 
             <Button Grid.Column="2" Text="Search" BackgroundColor="#1a7bc4"
-                    TextColor="White" FontSize="13" CornerRadius="3" HeightRequest="36" />
+                    TextColor="White" FontSize="13" CornerRadius="3" HeightRequest="36"
+                    Command="{Binding SearchCommand}" />
+
             <Entry Grid.Column="3"
                    Placeholder="Game name" PlaceholderColor="#7a8b99"
                    TextColor="White" BackgroundColor="#3d5266"
-                   FontSize="13" HeightRequest="36" />
+                   FontSize="13" HeightRequest="36"
+                   Text="{Binding SearchText}"
+                   ReturnCommand="{Binding SearchCommand}" />
         </Grid>
 
         <CollectionView Grid.Row="2" ItemsSource="{Binding VideoGames}">
