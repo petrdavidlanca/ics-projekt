@@ -67,6 +67,41 @@ public partial class VideoGameListViewModel(
         await alertService.DisplayAsync("Done", $"Game added to \"{library.Name}\".");
     }
 
+    [RelayCommand]
+    private async Task SortAsync()
+    {
+        string[] options = { "Name (A-Z)", "Name (Z-A)", "PEGI Rating (Low-High)", "PEGI Rating (High-Low)" };
+        string? selected = await Shell.Current.DisplayActionSheet("Sort games by", "Cancel", null, options);
+
+        if (selected is null || selected == "Cancel")
+            return;
+
+        string sortBy = "name";
+        bool ascending = true;
+
+        switch (selected)
+        {
+            case "Name (A-Z)":
+                sortBy = "name";
+                ascending = true;
+                break;
+            case "Name (Z-A)":
+                sortBy = "name";
+                ascending = false;
+                break;
+            case "Rating (Low-High)":
+                sortBy = "rating";
+                ascending = true;
+                break;
+            case "Rating (High-Low)":
+                sortBy = "rating";
+                ascending = false;
+                break;
+        }
+
+        VideoGames = await videoGameFacade.GetFilteredGamesAsync(null, sortBy, ascending, null);
+    }
+
     public void Receive(VideoGameEditMessage message) => ForceDataRefreshOnNextAppearing();
     public void Receive(VideoGameDeleteMessage message) => ForceDataRefreshOnNextAppearing();
 }
