@@ -51,6 +51,7 @@ public partial class UserEditViewModel(
                 );
             return;
         }
+        User.GameLibrary.Clear();
         await userFacade.SaveAsync(User);
 
         MessengerService.Send(new UserEditMessage { UserId = User.Id });
