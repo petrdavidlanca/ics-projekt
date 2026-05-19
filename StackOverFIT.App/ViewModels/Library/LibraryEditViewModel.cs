@@ -73,7 +73,7 @@ public partial class LibraryEditViewModel(
         {
             Library.Id = Id;
         }
-
+        Library.VideoGames.Clear();
         await libraryFacade.SaveAsync(Library);
 
         MessengerService.Send(new LibraryEditMessage { LibraryId = Library.Id });
