@@ -22,14 +22,19 @@ public partial class VideoGameEditViewModel(
     [ObservableProperty]
     private Guid _id;
 
+    [ObservableProperty]
+    private string pageTitle = "Create a new game";
+
     partial void OnIdChanged(Guid value)
     {
         if (value != Guid.Empty)
         {
+            PageTitle = "Edit game";
             MainThread.BeginInvokeOnMainThread(async () => await LoadDataAsync());
         }
         else
         {
+            PageTitle = "Create a new game";
             VideoGame = VideoGameDetailModel.Empty;
         }
     }
