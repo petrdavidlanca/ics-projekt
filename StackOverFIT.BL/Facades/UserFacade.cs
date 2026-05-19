@@ -22,6 +22,7 @@ public class UserFacade(
         var entity = await uow.GetRepository<UserEntity, UserEntityMapper>()
             .Get()
             .Include(u => u.GameLibrary)
+                .ThenInclude(l => l.VideoGames)
             .FirstOrDefaultAsync(u => u.Id == id)
             .ConfigureAwait(false);
         return entity is null

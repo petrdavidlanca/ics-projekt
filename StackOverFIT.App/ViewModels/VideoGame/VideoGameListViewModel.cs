@@ -77,6 +77,8 @@ public partial class VideoGameListViewModel(
         var library = libraries.First(l => l.Name == selected);
         await libraryFacade.AddVideoGameAsync(library.Id, gameId);
 
+        MessengerService.Send(new LibraryEditMessage { LibraryId = library.Id });
+
         await alertService.DisplayAsync("Done", $"Game added to \"{library.Name}\".");
     }
 

@@ -56,7 +56,8 @@ public class LibraryFacade(
     public async Task<IEnumerable<LibraryListModel>> GetFilteredLibrariesAsync(string? searchTerm, string? sortBy, bool ascending = true)
     {
         await using IUnitOfWork uow = UnitOfWorkFactory.Create();
-        IQueryable<LibraryEntity> query = uow.GetRepository<LibraryEntity, LibraryEntityMapper>().Get();
+
+        IQueryable<LibraryEntity> query = uow.GetRepository<LibraryEntity, LibraryEntityMapper>().Get().Include(l => l.VideoGames);
 
         if (!string.IsNullOrWhiteSpace(searchTerm))
         {

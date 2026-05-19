@@ -74,9 +74,13 @@ public partial class LibraryDetailViewModel(
 
         await libraryFacade.RemoveVideoGameAsync(Library.Id, videoGameId);
 
+        MessengerService.Send(new LibraryEditMessage { LibraryId = Library.Id });
+
         var game = Library.VideoGames.FirstOrDefault(g => g.Id == videoGameId);
         if (game is not null)
             Library.VideoGames.Remove(game);
+            Library.NumOfGames--;
+            OnPropertyChanged(nameof(Library));
     }
 
     public void Receive(LibraryEditMessage message)

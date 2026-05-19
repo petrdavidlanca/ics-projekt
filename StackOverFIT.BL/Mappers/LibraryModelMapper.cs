@@ -13,7 +13,7 @@ public class LibraryModelMapper : ModelMapperBase<LibraryEntity, LibraryListMode
             {
                 Id = entity.Id,
                 Name = entity.Name,
-                NumOfGames = entity.NumOfGames
+                NumOfGames = entity.VideoGames?.Count ?? 0
             };
 
     public override LibraryDetailModel MapToDetailModel(LibraryEntity? entity)
