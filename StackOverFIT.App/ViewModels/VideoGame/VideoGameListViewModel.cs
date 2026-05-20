@@ -96,6 +96,13 @@ public partial class VideoGameListViewModel(
         IsSortMenuVisible = false;
     }
 
+    [RelayCommand]
+    private void CloseMenus()
+    {
+        IsFilterMenuVisible = false;
+        IsSortMenuVisible = false;
+    }
+
     partial void OnShowAdultGamesChanged(bool value)
     {
         MainThread.BeginInvokeOnMainThread(async () => await RefreshListAsync());

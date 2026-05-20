@@ -96,6 +96,15 @@
             </CollectionView.ItemTemplate>
         </CollectionView>
 
+        <ContentView Grid.Row="0" Grid.RowSpan="10" Grid.ColumnSpan="10"
+             BackgroundColor="Transparent"
+             IsVisible="{Binding IsFilterMenuVisible}"
+             ZIndex="9">
+            <ContentView.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding CloseMenusCommand}" />
+            </ContentView.GestureRecognizers>
+        </ContentView>
+
         <Border Grid.Row="2"
                 IsVisible="{Binding IsFilterMenuVisible}"
                 BackgroundColor="#2a475e"
