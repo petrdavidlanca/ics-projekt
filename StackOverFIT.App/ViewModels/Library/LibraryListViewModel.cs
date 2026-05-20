@@ -30,6 +30,12 @@ public partial class LibraryListViewModel(
         var user = await userFacade.GetAsync(currentUserService.CurrentUserId);
         IEnumerable<LibraryListModel> processedList = user?.GameLibrary ?? [];
 
+        if (!string.IsNullOrWhiteSpace(SearchText))
+        {
+            processedList = processedList.Where(l =>
+                l.Name.Contains(SearchText, StringComparison.OrdinalIgnoreCase));
+        }
+
         if (HideEmptyLibraries)
         {
             processedList = processedList.Where(l => l.NumOfGames > 0);
@@ -123,6 +129,20 @@ public partial class LibraryListViewModel(
         }
 
         MainThread.BeginInvokeOnMainThread(async () => await LoadDataAsync());
+    }
+
+    [ObservableProperty]
+    private string searchText = string.Empty;
+
+    partial void OnSearchTextChanged(string value)
+    {
+        MainThread.BeginInvokeOnMainThread(async () => await LoadDataAsync());
+    }
+
+    [RelayCommand]
+    private async Task SearchAsync()
+    {
+        await LoadDataAsync();
     }
     public void Receive(LibraryEditMessage message) => ForceDataRefreshOnNextAppearing();
     public void Receive(LibraryDeleteMessage message) => ForceDataRefreshOnNextAppearing();
