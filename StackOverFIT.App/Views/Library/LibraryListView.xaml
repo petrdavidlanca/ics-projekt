@@ -40,6 +40,7 @@
                     BackgroundColor="#3d4450"
                     TextColor="White" FontSize="13" CornerRadius="3" HeightRequest="36"
                     Command="{Binding ToggleFilterMenuCommand}" />
+
             <Button Grid.Column="1"
                     Text="Sort"
                     ImageSource="sort_icon.png" 

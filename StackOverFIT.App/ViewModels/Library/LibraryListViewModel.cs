@@ -18,14 +18,28 @@ public partial class LibraryListViewModel(
     IUserFacade userFacade,
     IMessengerService messengerService,
     ICurrentUserService currentUserService)
-    : ViewModelBase(messengerService), IRecipient<LibraryEditMessage>, IRecipient<LibraryDeleteMessage>
+    : ViewModelBase(messengerService), IRecipient<LibraryEditMessage>, IRecipient<LibraryDeleteMessage>, IRecipient<ReloadDataMessage>
 {
     [ObservableProperty]
     public partial IEnumerable<LibraryListModel> Libraries { get; set; } = [];
 
+    private string currentSortBy = "name";
+    private bool currentAscending = true;
+
+    [ObservableProperty]
+    private string searchText = string.Empty;
+
+    [ObservableProperty]
+    private bool isFilterMenuVisible;
+
+    [ObservableProperty]
+    private bool hideEmptyLibraries = false;
+
     protected override async Task LoadDataAsync()
     {
         await base.LoadDataAsync();
+        await RefreshListAsync();
+    }
 
         var user = await userFacade.GetAsync(currentUserService.CurrentUserId);
         IEnumerable<LibraryListModel> processedList = user?.GameLibrary ?? [];
@@ -57,38 +71,36 @@ public partial class LibraryListViewModel(
         Libraries = processedList.ToList();
     }
 
-    [RelayCommand]
-    private async Task GoToEditAsync(Guid id)
+    partial void OnSearchTextChanged(string value)
     {
-        await navigationService.GoToAsync(NavigationService.LibraryEditRouteRelative,
-            new Dictionary<string, object?>
-            {
-                [nameof(LibraryDetailViewModel.Id)] = id
-            });
+        MainThread.BeginInvokeOnMainThread(async () => await RefreshListAsync());
     }
 
     [RelayCommand]
-    private async Task GoToDetailAsync(Guid id)
-        => await navigationService.GoToAsync(NavigationService.LibraryDetailRouteRelative,
-            new Dictionary<string, object?>
-            {
-                [nameof(LibraryDetailViewModel.Id)] = id
-            });
+    private async Task SearchAsync()
+    {
+        await RefreshListAsync();
+    }
 
     [RelayCommand]
-    private async Task GoToCreateAsync()
-        => await navigationService.GoToAsync(NavigationService.LibraryEditRouteRelative,
-            new Dictionary<string, object?>
-            {
-                [nameof(LibraryEditViewModel.UserId)] = currentUserService.CurrentUserId
-            });
+    private async Task SortAsync()
+    {
+        string[] options = { "Name (A-Z)", "Name (Z-A)", "Most Games", "Least Games" };
+        string? selected = await Shell.Current.DisplayActionSheet("Sort libraries by", "Cancel", null, options);
 
-    // --- MENU STATE ---
-    [ObservableProperty]
-    private bool isFilterMenuVisible;
+        if (selected is null || selected == "Cancel")
+            return;
 
-    [ObservableProperty]
-    private bool hideEmptyLibraries = false;
+        switch (selected)
+        {
+            case "Name (A-Z)": currentSortBy = "name"; currentAscending = true; break;
+            case "Name (Z-A)": currentSortBy = "name"; currentAscending = false; break;
+            case "Most Games": currentSortBy = "games"; currentAscending = false; break;
+            case "Least Games": currentSortBy = "games"; currentAscending = true; break;
+        }
+
+        await RefreshListAsync();
+    }
 
     [RelayCommand]
     private void ToggleFilterMenu()
@@ -96,7 +108,6 @@ public partial class LibraryListViewModel(
         IsFilterMenuVisible = !IsFilterMenuVisible;
     }
 
-    // New command strictly for the invisible backdrop
     [RelayCommand]
     private void CloseFilterMenu()
     {
@@ -105,7 +116,17 @@ public partial class LibraryListViewModel(
 
     partial void OnHideEmptyLibrariesChanged(bool value)
     {
-        MainThread.BeginInvokeOnMainThread(async () => await LoadDataAsync());
+        MainThread.BeginInvokeOnMainThread(async () => await RefreshListAsync());
+    }
+
+    [RelayCommand]
+    private async Task GoToEditAsync(Guid id)
+    {
+        await navigationService.GoToAsync(NavigationService.LibraryEditRouteRelative,
+            new Dictionary<string, object?>
+            {
+                [nameof(LibraryDetailViewModel.Id)] = id
+            });
     }
 
     private string currentSortBy = "name";
@@ -146,4 +167,8 @@ public partial class LibraryListViewModel(
     }
     public void Receive(LibraryEditMessage message) => ForceDataRefreshOnNextAppearing();
     public void Receive(LibraryDeleteMessage message) => ForceDataRefreshOnNextAppearing();
+    public async void Receive(ReloadDataMessage message)
+    {
+        await LoadDataAsync();
+    }
 }

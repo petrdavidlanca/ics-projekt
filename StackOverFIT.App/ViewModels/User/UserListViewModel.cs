@@ -18,7 +18,7 @@ public partial class UserListViewModel(
     IMessengerService messengerService,
     IAlertService alertService,
     ICurrentUserService currentUserService)
-    : ViewModelBase(messengerService), IRecipient<UserEditMessage>, IRecipient<UserDeleteMessage>
+    : ViewModelBase(messengerService), IRecipient<UserEditMessage>, IRecipient<UserDeleteMessage>, IRecipient<ReloadDataMessage>
 {
     [ObservableProperty]
     public partial IEnumerable<UserListModel> Users { get; set; } = [];
@@ -73,5 +73,9 @@ public partial class UserListViewModel(
     public void Receive(UserDeleteMessage message)
     {
         ForceDataRefreshOnNextAppearing();
+    }
+    public async void Receive(ReloadDataMessage message)
+    {
+        await LoadDataAsync();
     }
 }
