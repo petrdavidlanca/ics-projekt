@@ -6,7 +6,7 @@
     xmlns:u="clr-namespace:StackOverFIT.App.Views.User"
     xmlns:l="clr-namespace:StackOverFIT.App.Views.Library"
     xmlns:v="clr-namespace:StackOverFIT.App.Views.VideoGame"
-    Title="StackOverFIT.App">
+    Title="StackOverFIT">
 
     <!-- Přihlašovací obrazovka -->
     <ShellContent
