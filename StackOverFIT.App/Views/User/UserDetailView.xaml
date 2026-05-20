@@ -7,7 +7,8 @@
     xmlns:models="clr-namespace:StackOverFIT.BL.Models;assembly=StackOverFIT.BL"
     x:DataType="vm:UserDetailViewModel"
     x:Class="StackOverFIT.App.Views.User.UserDetailView"
-    BackgroundColor="#1b2838">
+    BackgroundColor="#1b2838"
+    x:Name="RootPage">
 
     <Grid RowDefinitions="Auto, *" Padding="40,30,40,20">
 
@@ -121,7 +122,9 @@
                                                     BackgroundColor="#1a7bc4" TextColor="White"
                                                     FontAttributes="Bold" FontSize="12"
                                                     CornerRadius="3" HeightRequest="34" WidthRequest="80"
-                                                    VerticalOptions="Center" />
+                                                    VerticalOptions="Center" 
+                                                    Command="{Binding BindingContext.GoToLibraryDetailCommand, Source={x:Reference RootPage}}" 
+                                                    CommandParameter="{Binding Id}"/>
                                         </Grid>
                                     </Frame>
                                 </Grid>
