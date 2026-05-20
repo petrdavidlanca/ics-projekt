@@ -35,27 +35,34 @@
             <Button Grid.Column="0" Text="Filter ▾" BackgroundColor="#3d4450"
                     TextColor="White" FontSize="13" CornerRadius="3" HeightRequest="36"
                     Command="{Binding ToggleFilterMenuCommand}" />
+
             <Button Grid.Column="1"
                     Text="Sort ▾"
                     BackgroundColor="#3d4450"
                     TextColor="White"
                     FontSize="13"
                     CornerRadius="3"
-                    HeightRequest="36" />
+                    HeightRequest="36"
+                    Command="{Binding SortCommand}" />
+
             <Button Grid.Column="2"
                     Text="Search"
                     BackgroundColor="#1a7bc4"
                     TextColor="White"
                     FontSize="13"
                     CornerRadius="3"
-                    HeightRequest="36" />
+                    HeightRequest="36"
+                    Command="{Binding SearchCommand}" />
+
             <Entry Grid.Column="3"
                    Placeholder="Library name"
                    PlaceholderColor="#7a8b99"
                    TextColor="White"
                    BackgroundColor="#3d5266"
                    FontSize="13"
-                   HeightRequest="36" />
+                   HeightRequest="36"
+                   Text="{Binding SearchText}"
+                   ReturnCommand="{Binding SearchCommand}" />
         </Grid>
 
         <CollectionView Grid.Row="2"
