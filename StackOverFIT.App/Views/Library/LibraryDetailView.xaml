@@ -72,13 +72,16 @@
                                CornerRadius="4" Padding="0" HasShadow="False">
                             <Grid ColumnDefinitions="120, *, Auto, Auto" ColumnSpacing="0">
 
-                                <Frame Grid.Column="0"
-                                       BackgroundColor="#3d5266" BorderColor="Transparent"
-                                       CornerRadius="0" Padding="0" HeightRequest="80" HasShadow="False">
-                                    <Label Text="🖼" FontSize="28"
-                                           HorizontalOptions="Center" VerticalOptions="Center"
-                                           TextColor="#6b7c8d" />
-                                </Frame>
+                                <Border Grid.Column="0"
+                                        BackgroundColor="#3d5266" StrokeThickness="0">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="4,0,0,4" />
+                                    </Border.StrokeShape>
+
+                                    <Image Aspect="AspectFill"
+                                           HeightRequest="80" WidthRequest="120"
+                                           Source="{Binding ImageUrl}" />
+                                </Border>
 
                                 <Label Grid.Column="1"
                                        Text="{Binding Name}"
