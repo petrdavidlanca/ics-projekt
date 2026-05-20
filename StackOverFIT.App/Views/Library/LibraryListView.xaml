@@ -18,7 +18,9 @@
                    TextColor="White"
                    VerticalOptions="Center" />
             <Button Grid.Column="1"
-                    Text="+ NEW LIBRARY"
+                    Text="NEW LIBRARY"
+                    ImageSource="add_icon.png" 
+                    ContentLayout="Left, 6"
                     BackgroundColor="#5ba32b"
                     TextColor="White"
                     FontAttributes="Bold"

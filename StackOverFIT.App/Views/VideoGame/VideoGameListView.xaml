@@ -87,7 +87,9 @@
                                            TextColor="White" FontSize="16" FontAttributes="Bold" />
                                 </VerticalStackLayout>
 
-                                <Button Grid.Column="2" Text="+ ADD"
+                                <Button Grid.Column="2" Text="ADD"
+                                        ImageSource="add_icon.png" 
+                                        ContentLayout="Left, 6"
                                         BackgroundColor="#5ba32b" TextColor="White"
                                         FontAttributes="Bold" FontSize="13"
                                         CornerRadius="3" WidthRequest="100"
