@@ -27,19 +27,28 @@ public partial class LibraryListViewModel(
     {
         await base.LoadDataAsync();
 
-        // 1. Fetch ONLY the current user's libraries
         var user = await userFacade.GetAsync(currentUserService.CurrentUserId);
-        var userLibraries = user?.GameLibrary ?? [];
+        IEnumerable<LibraryListModel> processedList = user?.GameLibrary ?? [];
 
-        // 2. Filter that specific list
         if (HideEmptyLibraries)
         {
-            Libraries = userLibraries.Where(l => l.NumOfGames > 0).ToList();
+            processedList = processedList.Where(l => l.NumOfGames > 0);
         }
-        else
+
+        processedList = currentSortBy switch
         {
-            Libraries = userLibraries;
-        }
+            "name" => currentAscending
+                ? processedList.OrderBy(l => l.Name)
+                : processedList.OrderByDescending(l => l.Name),
+
+            "count" => currentAscending
+                ? processedList.OrderBy(l => l.NumOfGames)
+                : processedList.OrderByDescending(l => l.NumOfGames),
+
+            _ => processedList.OrderBy(l => l.Name)
+        };
+
+        Libraries = processedList.ToList();
     }
 
     [RelayCommand]
@@ -93,6 +102,28 @@ public partial class LibraryListViewModel(
         MainThread.BeginInvokeOnMainThread(async () => await LoadDataAsync());
     }
 
+    private string currentSortBy = "name";
+    private bool currentAscending = true;
+
+    [RelayCommand]
+    private async Task SortAsync()
+    {
+        string[] options = { "Name (A-Z)", "Name (Z-A)", "Games count (Low-High)", "Games count (High-Low)" };
+        string? selected = await Shell.Current.DisplayActionSheet("Sort libraries by", "Cancel", null, options);
+
+        if (selected is null || selected == "Cancel")
+            return;
+
+        switch (selected)
+        {
+            case "Name (A-Z)": currentSortBy = "name"; currentAscending = true; break;
+            case "Name (Z-A)": currentSortBy = "name"; currentAscending = false; break;
+            case "Games count (Low-High)": currentSortBy = "count"; currentAscending = true; break;
+            case "Games count (High-Low)": currentSortBy = "count"; currentAscending = false; break;
+        }
+
+        MainThread.BeginInvokeOnMainThread(async () => await LoadDataAsync());
+    }
     public void Receive(LibraryEditMessage message) => ForceDataRefreshOnNextAppearing();
     public void Receive(LibraryDeleteMessage message) => ForceDataRefreshOnNextAppearing();
 }

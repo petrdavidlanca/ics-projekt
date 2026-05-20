@@ -46,7 +46,8 @@
                     TextColor="White"
                     FontSize="13"
                     CornerRadius="3"
-                    HeightRequest="36" />
+                    HeightRequest="36"
+                    Command="{Binding SortCommand}" />
             <Button Grid.Column="2"
                     Text="Search"
                     ImageSource="search_icon.png" 
