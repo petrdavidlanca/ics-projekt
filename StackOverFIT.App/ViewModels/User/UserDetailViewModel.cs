@@ -23,7 +23,8 @@ public partial class UserDetailViewModel(
       IRecipient<LibraryEditMessage>,
       IRecipient<LibraryDeleteMessage>,
       IRecipient<VideoGameEditMessage>,
-      IRecipient<VideoGameDeleteMessage>
+      IRecipient<VideoGameDeleteMessage>,
+      IRecipient<ReloadDataMessage>
 {
     public Guid Id { get; set; }
 
@@ -60,7 +61,7 @@ public partial class UserDetailViewModel(
 
         MainThread.BeginInvokeOnMainThread(() =>
         {
-            Application.Current!.Windows[0].Page = new AppShell(navigationService);
+            Application.Current!.Windows[0].Page = new AppShell(messengerService);
         });
 
         await Task.CompletedTask;
