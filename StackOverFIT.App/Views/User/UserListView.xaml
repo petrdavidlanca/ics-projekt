@@ -7,6 +7,8 @@
     xmlns:models="clr-namespace:StackOverFIT.BL.Models;assembly=StackOverFIT.BL"
     x:DataType="vm:UserListViewModel"
     x:Class="StackOverFIT.App.Views.User.UserListView"
+    Shell.NavBarIsVisible="False"
+    Shell.FlyoutBehavior="Disabled"
     BackgroundColor="#1b2838">
 
     <Grid RowDefinitions="Auto, *" Padding="0,40,0,40">
