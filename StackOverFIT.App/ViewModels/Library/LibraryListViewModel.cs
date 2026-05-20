@@ -18,11 +18,15 @@ public partial class LibraryListViewModel(
     IUserFacade userFacade,
     IMessengerService messengerService,
     ICurrentUserService currentUserService)
-    : ViewModelBase(messengerService), IRecipient<LibraryEditMessage>, IRecipient<LibraryDeleteMessage>, IRecipient<ReloadDataMessage>
+    : ViewModelBase(messengerService),
+      IRecipient<LibraryEditMessage>,
+      IRecipient<LibraryDeleteMessage>,
+      IRecipient<ReloadDataMessage> // <-- Your new message receiver!
 {
     [ObservableProperty]
     public partial IEnumerable<LibraryListModel> Libraries { get; set; } = [];
 
+    // --- STATE VARIABLES ---
     private string currentSortBy = "name";
     private bool currentAscending = true;
 
@@ -35,26 +39,33 @@ public partial class LibraryListViewModel(
     [ObservableProperty]
     private bool hideEmptyLibraries = false;
 
+    // --- DATA LOADING & FILTERING ---
     protected override async Task LoadDataAsync()
     {
         await base.LoadDataAsync();
         await RefreshListAsync();
     }
 
+    // Consolidated method to handle searching, filtering, and sorting cleanly
+    private async Task RefreshListAsync()
+    {
         var user = await userFacade.GetAsync(currentUserService.CurrentUserId);
         IEnumerable<LibraryListModel> processedList = user?.GameLibrary ?? [];
 
+        // 1. Apply Search
         if (!string.IsNullOrWhiteSpace(SearchText))
         {
             processedList = processedList.Where(l =>
                 l.Name.Contains(SearchText, StringComparison.OrdinalIgnoreCase));
         }
 
+        // 2. Apply Empty Filter
         if (HideEmptyLibraries)
         {
             processedList = processedList.Where(l => l.NumOfGames > 0);
         }
 
+        // 3. Apply Sort
         processedList = currentSortBy switch
         {
             "name" => currentAscending
@@ -68,9 +79,11 @@ public partial class LibraryListViewModel(
             _ => processedList.OrderBy(l => l.Name)
         };
 
+        // 4. Update UI
         Libraries = processedList.ToList();
     }
 
+    // --- COMMANDS ---
     partial void OnSearchTextChanged(string value)
     {
         MainThread.BeginInvokeOnMainThread(async () => await RefreshListAsync());
@@ -85,7 +98,7 @@ public partial class LibraryListViewModel(
     [RelayCommand]
     private async Task SortAsync()
     {
-        string[] options = { "Name (A-Z)", "Name (Z-A)", "Most Games", "Least Games" };
+        string[] options = { "Name (A-Z)", "Name (Z-A)", "Games count (Low-High)", "Games count (High-Low)" };
         string? selected = await Shell.Current.DisplayActionSheet("Sort libraries by", "Cancel", null, options);
 
         if (selected is null || selected == "Cancel")
@@ -95,8 +108,8 @@ public partial class LibraryListViewModel(
         {
             case "Name (A-Z)": currentSortBy = "name"; currentAscending = true; break;
             case "Name (Z-A)": currentSortBy = "name"; currentAscending = false; break;
-            case "Most Games": currentSortBy = "games"; currentAscending = false; break;
-            case "Least Games": currentSortBy = "games"; currentAscending = true; break;
+            case "Games count (Low-High)": currentSortBy = "count"; currentAscending = true; break;
+            case "Games count (High-Low)": currentSortBy = "count"; currentAscending = false; break;
         }
 
         await RefreshListAsync();
@@ -119,6 +132,17 @@ public partial class LibraryListViewModel(
         MainThread.BeginInvokeOnMainThread(async () => await RefreshListAsync());
     }
 
+    // --- NAVIGATION ---
+    [RelayCommand]
+    private async Task GoToDetailAsync(Guid id)
+    {
+        await navigationService.GoToAsync(NavigationService.LibraryDetailRouteRelative,
+            new Dictionary<string, object?>
+            {
+                [nameof(LibraryDetailViewModel.Id)] = id
+            });
+    }
+
     [RelayCommand]
     private async Task GoToEditAsync(Guid id)
     {
@@ -129,46 +153,23 @@ public partial class LibraryListViewModel(
             });
     }
 
-    private string currentSortBy = "name";
-    private bool currentAscending = true;
-
     [RelayCommand]
-    private async Task SortAsync()
+    private async Task GoToCreateAsync()
     {
-        string[] options = { "Name (A-Z)", "Name (Z-A)", "Games count (Low-High)", "Games count (High-Low)" };
-        string? selected = await Shell.Current.DisplayActionSheet("Sort libraries by", "Cancel", null, options);
-
-        if (selected is null || selected == "Cancel")
-            return;
-
-        switch (selected)
-        {
-            case "Name (A-Z)": currentSortBy = "name"; currentAscending = true; break;
-            case "Name (Z-A)": currentSortBy = "name"; currentAscending = false; break;
-            case "Games count (Low-High)": currentSortBy = "count"; currentAscending = true; break;
-            case "Games count (High-Low)": currentSortBy = "count"; currentAscending = false; break;
-        }
-
-        MainThread.BeginInvokeOnMainThread(async () => await LoadDataAsync());
+        await navigationService.GoToAsync(NavigationService.LibraryEditRouteRelative,
+            new Dictionary<string, object?>
+            {
+                [nameof(LibraryEditViewModel.UserId)] = currentUserService.CurrentUserId
+            });
     }
 
-    [ObservableProperty]
-    private string searchText = string.Empty;
-
-    partial void OnSearchTextChanged(string value)
-    {
-        MainThread.BeginInvokeOnMainThread(async () => await LoadDataAsync());
-    }
-
-    [RelayCommand]
-    private async Task SearchAsync()
-    {
-        await LoadDataAsync();
-    }
+    // --- MESSAGES ---
     public void Receive(LibraryEditMessage message) => ForceDataRefreshOnNextAppearing();
     public void Receive(LibraryDeleteMessage message) => ForceDataRefreshOnNextAppearing();
-    public async void Receive(ReloadDataMessage message)
+
+    public void Receive(ReloadDataMessage message)
     {
-        await LoadDataAsync();
+        // Safely ask the main thread to refresh the list when the message arrives
+        MainThread.BeginInvokeOnMainThread(async () => await RefreshListAsync());
     }
 }
