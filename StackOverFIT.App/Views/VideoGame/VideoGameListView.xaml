@@ -20,15 +20,21 @@
               ColumnDefinitions="Auto, Auto, Auto, *"
               ColumnSpacing="8" Margin="0,0,0,16">
             
-            <Button Grid.Column="0" Text="Filter ▾" BackgroundColor="#3d4450"
+            <Button Grid.Column="0" Text="Filter" BackgroundColor="#3d4450"
+                    ImageSource="filter_icon.png" 
+                    ContentLayout="Right, 6"
                     TextColor="White" FontSize="13" CornerRadius="3" HeightRequest="36"
                     Command="{Binding ToggleFilterMenuCommand}" />
 
             <Button Grid.Column="1" Text="Sort" BackgroundColor="#3d4450"
+                    ImageSource="sort_icon.png" 
+                    ContentLayout="Right, 6"
                     TextColor="White" FontSize="13" CornerRadius="3" HeightRequest="36"
                     Command="{Binding SortCommand}" />
 
             <Button Grid.Column="2" Text="Search" BackgroundColor="#1a7bc4"
+                    ImageSource="search_icon.png" 
+                    ContentLayout="Right, 6"
                     TextColor="White" FontSize="13" CornerRadius="3" HeightRequest="36"
                     Command="{Binding SearchCommand}" />
 
