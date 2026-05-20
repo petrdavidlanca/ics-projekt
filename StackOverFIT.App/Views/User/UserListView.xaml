@@ -19,7 +19,7 @@
                HorizontalOptions="Center"
                Margin="0,0,0,40" />
 
-        <ScrollView Grid.Row="1" Orientation="Horizontal">
+        <ScrollView Grid.Row="1" Orientation="Horizontal" HorizontalOptions="Center">
             <HorizontalStackLayout Spacing="24" Padding="60,0" VerticalOptions="Center">
 
                 <HorizontalStackLayout Spacing="24"
