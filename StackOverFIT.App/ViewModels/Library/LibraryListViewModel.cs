@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.Extensions.DependencyModel;
 using StackOverFIT.App.Messages;
 using StackOverFIT.App.Services;
 using StackOverFIT.BL.Facades;
@@ -27,6 +28,16 @@ public partial class LibraryListViewModel(
         await base.LoadDataAsync();
         var user = await userFacade.GetAsync(currentUserService.CurrentUserId);
         Libraries = user?.GameLibrary ?? [];
+    }
+
+    [RelayCommand]
+    private async Task GoToEditAsync(Guid id)
+    {
+        await navigationService.GoToAsync(NavigationService.LibraryEditRouteRelative,
+            new Dictionary<string, object?>
+            {
+                [nameof(LibraryDetailViewModel.Id)] = id
+            });
     }
 
     [RelayCommand]
