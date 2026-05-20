@@ -12,12 +12,21 @@
 
     <Grid RowDefinitions="Auto, Auto, Auto, *" Padding="40,30,40,20">
 
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#1b2838" Offset="0.0" />
+                <GradientStop Color="#0a0f16" Offset="1.0" />
+            </LinearGradientBrush>
+        </Grid.Background>
+
         <Grid Grid.Row="0"
               ColumnDefinitions="Auto, *, Auto, Auto"
               ColumnSpacing="12" Margin="0,0,0,20">
 
             <Button Grid.Column="0" Text="EDIT"
                     BackgroundColor="#f5a623" TextColor="White"
+                    ImageSource="edit_icon.png" 
+                    ContentLayout="Right, 6"
                     FontAttributes="Bold" FontSize="13"
                     CornerRadius="3" HeightRequest="38"
                     VerticalOptions="Center"
@@ -35,6 +44,8 @@
 
             <Button Grid.Column="3" Text="DELETE"
                     BackgroundColor="#8b1a1a" TextColor="White"
+                    ImageSource="delete_icon.png"
+                    ContentLayout="Left, 6"
                     FontAttributes="Bold" FontSize="13"
                     CornerRadius="3" HeightRequest="38"
                     VerticalOptions="Center"
@@ -98,8 +109,20 @@
                                        TextColor="White" FontSize="16" FontAttributes="Bold"
                                        Padding="16,0" VerticalOptions="Center" />
 
+                                <Button Grid.Column="2" Text="PLAY"
+                                        BackgroundColor="#1a7bc4" TextColor="White"
+                                        ImageSource="play_icon.png"
+                                        ContentLayout="Left, 6"
+                                        FontAttributes="Bold" FontSize="12"
+                                        CornerRadius="3" HeightRequest="36"
+                                        Margin="0,0,8,0" VerticalOptions="Center"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:LibraryDetailViewModel}}, Path=PlayGameCommand}"
+                                        CommandParameter="{Binding Id}" />
+
                                 <Button Grid.Column="3" Text="REMOVE"
                                         BackgroundColor="#8b1a1a" TextColor="White"
+                                        ImageSource="remove_icon.png" 
+                                        ContentLayout="Left, 6"
                                         FontAttributes="Bold" FontSize="13"
                                         CornerRadius="3" WidthRequest="110"
                                         Margin="0,0,12,0" VerticalOptions="Center"

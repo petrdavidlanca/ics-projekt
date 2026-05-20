@@ -11,6 +11,13 @@
     x:Name="RootPage">
 
     <Grid RowDefinitions="Auto, *" Padding="40,30,40,20">
+        
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#1b2838" Offset="0.0" />
+                <GradientStop Color="#0a0f16" Offset="1.0" />
+            </LinearGradientBrush>
+        </Grid.Background>
 
         <!-- Hlavička s tlačítkem Log out vpravo -->
         <Grid Grid.Row="0" ColumnDefinitions="*, Auto" Margin="0,0,0,24">
@@ -20,6 +27,8 @@
                    VerticalOptions="Center" />
             <Button Grid.Column="1"
                     Text="Log out"
+                    ImageSource="logout_icon.png" 
+                    ContentLayout="Left, 6"
                     BackgroundColor="Transparent"
                     TextColor="#c6d4df"
                     FontSize="14"
@@ -87,6 +96,8 @@
 
                         <Button Text="EDIT PROFILE"
                                 BackgroundColor="#f5a623" TextColor="White"
+                                ImageSource="edit_icon.png" 
+                                ContentLayout="Left, 6"
                                 FontAttributes="Bold" FontSize="13"
                                 CornerRadius="3" HeightRequest="38"
                                 Command="{Binding GoToEditCommand}" />

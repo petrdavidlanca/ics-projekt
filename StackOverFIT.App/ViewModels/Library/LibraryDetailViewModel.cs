@@ -154,6 +154,12 @@ public partial class LibraryDetailViewModel(
     }
 
     [RelayCommand]
+    private async Task PlayGameAsync(Guid gameId)
+    {
+        await alertService.DisplayAsync("Play", "Launching game");
+    }
+
+    [RelayCommand]
     private async Task RemoveVideoGameAsync(Guid videoGameId)
     {
         if (Library is null) return;

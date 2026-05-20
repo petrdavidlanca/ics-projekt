@@ -10,6 +10,13 @@
 
     <Grid RowDefinitions="Auto, *" Padding="0,30,0,30">
 
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#1b2838" Offset="0.0" />
+                <GradientStop Color="#0a0f16" Offset="1.0" />
+            </LinearGradientBrush>
+        </Grid.Background>
+
         <ScrollView Grid.Row="1">
             <VerticalStackLayout Padding="40,0" Spacing="20">
 
@@ -24,14 +31,32 @@
                                Source="{Binding VideoGame.ImageUrl}" />
 
                         <Border Grid.Row="0" Grid.Column="1"
-                                BackgroundColor="#f5a200" StrokeThickness="0"
+                                BackgroundColor="#5ba32b" StrokeThickness="0"
                                 HorizontalOptions="End" VerticalOptions="End"
                                 Margin="0,0,12,12" Padding="8,4">
+
                             <Border.StrokeShape>
                                 <RoundRectangle CornerRadius="2" />
                             </Border.StrokeShape>
+
+                            <Border.Triggers>
+
+                                <DataTrigger TargetType="Border" Binding="{Binding VideoGame.PegiRating}" Value="12">
+                                    <Setter Property="BackgroundColor" Value="#f5a623" />
+                                </DataTrigger>
+
+                                <DataTrigger TargetType="Border" Binding="{Binding VideoGame.PegiRating}" Value="16">
+                                    <Setter Property="BackgroundColor" Value="#f5a623" />
+                                </DataTrigger>
+
+                                <DataTrigger TargetType="Border" Binding="{Binding VideoGame.PegiRating}" Value="18">
+                                    <Setter Property="BackgroundColor" Value="#8b1a1a" />
+                                </DataTrigger>
+
+                            </Border.Triggers>
+
                             <Label Text="{Binding VideoGame.PegiRating, StringFormat='{0}+'}"
-                                   TextColor="White" FontSize="18" FontAttributes="Bold" />
+                                   TextColor="White" FontSize="20" FontAttributes="Bold" />
                         </Border>
 
                         <VerticalStackLayout Grid.Row="1" Grid.Column="0"
@@ -46,17 +71,23 @@
                                             Spacing="10" Padding="12,16" VerticalOptions="Start">
                             <Button Text="PLAY" 
                                     Command="{Binding PlayCommand}" 
-                                    BackgroundColor="#208aff" 
+                                    BackgroundColor="#208aff"
+                                    ImageSource="play_icon.png" 
+                                    ContentLayout="Left, 6"
                                     TextColor="White" 
                                     FontAttributes="Bold" FontSize="13"
                                     CornerRadius="3" HeightRequest="38" WidthRequest="120" />
                             <Button Text="EDIT"
                                     BackgroundColor="#f5a623" TextColor="White"
+                                    ImageSource="edit_icon.png" 
+                                    ContentLayout="Left, 6"
                                     FontAttributes="Bold" FontSize="13"
                                     CornerRadius="3" HeightRequest="38" WidthRequest="120"
                                     Command="{Binding GoToEditCommand}" />
                             <Button Text="DELETE"
                                     BackgroundColor="#8b1a1a" TextColor="White"
+                                    ImageSource="delete_icon.png" 
+                                    ContentLayout="Left, 6"
                                     FontAttributes="Bold" FontSize="13"
                                     CornerRadius="3" HeightRequest="38" WidthRequest="120"
                                     Command="{Binding DeleteCommand}" />

@@ -13,6 +13,7 @@ public class VideoGameModelMapper : ModelMapperBase<VideoGameEntity, VideoGameLi
             {
                 Id = entity.Id,
                 Name = entity.Name,
+                Description = entity.Description,
                 ImageUrl = entity.ImageUrl
             };
 

@@ -6,9 +6,18 @@
     xmlns:vm="clr-namespace:StackOverFIT.App.ViewModels"
     x:DataType="vm:UserEditViewModel"
     x:Class="StackOverFIT.App.Views.User.UserEditView"
-    BackgroundColor="#1b2838">
+    BackgroundColor="#1b2838"
+    Shell.NavBarIsVisible="False"
+    Shell.FlyoutBehavior="Disabled">
 
     <Grid RowDefinitions="Auto, *" Padding="0,40,0,40">
+
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#1b2838" Offset="0.0" />
+                <GradientStop Color="#0a0f16" Offset="1.0" />
+            </LinearGradientBrush>
+        </Grid.Background>
 
         <ScrollView Grid.Row="1">
             <VerticalStackLayout HorizontalOptions="Center"

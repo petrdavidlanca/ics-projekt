@@ -11,6 +11,13 @@
 
     <Grid RowDefinitions="Auto, Auto, *" Padding="40,30,40,20">
 
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#1b2838" Offset="0.0" />
+                <GradientStop Color="#0a0f16" Offset="1.0" />
+            </LinearGradientBrush>
+        </Grid.Background>
+
         <Label Grid.Row="0"
                Text="Welcome to the store"
                FontSize="32" TextColor="White"
@@ -53,23 +60,15 @@
             </CollectionView.EmptyView>
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:VideoGameListModel">
-                    <Grid Padding="0,4" ColumnDefinitions="Auto, *" ColumnSpacing="8">
+                    <Grid Padding="0,4">
 
-                        <Button Grid.Column="0" Text="EDIT"
-                                BackgroundColor="#f5a623" TextColor="White"
-                                FontAttributes="Bold" FontSize="12"
-                                CornerRadius="3" HeightRequest="36" WidthRequest="70"
-                                VerticalOptions="Center"
-                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:VideoGameListViewModel}}, Path=GoToDetailCommand}"
-                                CommandParameter="{Binding Id}" />
-
-                        <Border Grid.Column="1"
-                                BackgroundColor="#2a475e" Stroke="#3d5a73"
+                        <Border BackgroundColor="#2a475e" Stroke="#3d5a73"
                                 StrokeThickness="1" HeightRequest="80">
                             <Border.StrokeShape>
                                 <RoundRectangle CornerRadius="4" />
                             </Border.StrokeShape>
-                            <Grid ColumnDefinitions="120, *, Auto" ColumnSpacing="0">
+
+                            <Grid ColumnDefinitions="120, *, Auto, Auto" ColumnSpacing="0">
 
                                 <Border Grid.Column="0"
                                         BackgroundColor="#3d5266" StrokeThickness="0">
@@ -81,13 +80,30 @@
                                            Source="{Binding ImageUrl}" />
                                 </Border>
 
-                                <VerticalStackLayout Grid.Column="1" Spacing="4" Padding="16,0" VerticalOptions="Center">
-
+                                <VerticalStackLayout Grid.Column="1" Spacing="2" Padding="16,4" VerticalOptions="Start">
                                     <Label Text="{Binding Name}"
-                                           TextColor="White" FontSize="16" FontAttributes="Bold" />
+                                           TextColor="White" 
+                                           FontSize="16" 
+                                           FontAttributes="Bold" />
+
+                                    <Label Text="{Binding Description}"
+                                           TextColor="#7a8b99" 
+                                           FontSize="13" 
+                                           LineBreakMode="TailTruncation" 
+                                           MaxLines="2" />
                                 </VerticalStackLayout>
 
-                                <Button Grid.Column="2" Text="ADD"
+                                <Button Grid.Column="2" Text="OPEN"
+                                        BackgroundColor="#1a7bc4" TextColor="White"
+                                        ImageSource="play_icon.png" 
+                                        ContentLayout="Left, 6"
+                                        FontAttributes="Bold" FontSize="13"
+                                        CornerRadius="3" HeightRequest="36"
+                                        Margin="0,0,12,0" VerticalOptions="Center"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:VideoGameListViewModel}}, Path=GoToDetailCommand}"
+                                        CommandParameter="{Binding Id}" />
+
+                                <Button Grid.Column="3" Text="ADD"
                                         ImageSource="add_icon.png" 
                                         ContentLayout="Left, 6"
                                         BackgroundColor="#5ba32b" TextColor="White"

@@ -7,6 +7,8 @@ public partial class VideoGameListModel : ModelBase
     [ObservableProperty]
     public required partial string Name { get; set; }
 
+    public string? Description { get; set; }
+
     public int PegiRating { get; set; }
 
     [ObservableProperty]

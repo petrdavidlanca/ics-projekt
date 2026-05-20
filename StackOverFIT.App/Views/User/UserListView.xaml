@@ -13,11 +13,20 @@
 
     <Grid RowDefinitions="Auto, *" Padding="0,40,0,40">
 
-        <Label Grid.Row="0"
-               Text="Choose an account"
-               FontSize="36" TextColor="White"
-               HorizontalOptions="Center"
-               Margin="0,0,0,40" />
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#1b2838" Offset="0.0" />
+                <GradientStop Color="#0a0f16" Offset="1.0" />
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <VerticalStackLayout Grid.Row="0" HorizontalOptions="Center" Margin="0,0,0,40" Spacing="4">
+            <Label Text="Choose a User"
+                   FontSize="42" 
+                   FontAttributes="Bold"
+                   TextColor="White"
+                   HorizontalOptions="Center" />
+        </VerticalStackLayout>
 
         <ScrollView Grid.Row="1" Orientation="Horizontal" HorizontalOptions="Center">
             <HorizontalStackLayout Spacing="24" Padding="60,0" VerticalOptions="Center">
@@ -29,9 +38,9 @@
                             <Frame BackgroundColor="#2a475e" BorderColor="#3d5a73"
                                    CornerRadius="6" Padding="20" WidthRequest="210"
                                    HasShadow="False">
-                                <VerticalStackLayout Spacing="10">
+                                <VerticalStackLayout Spacing="10" VerticalOptions="Start">
 
-                                    <Image Source="user_placeholder.png" WidthRequest="120" HeightRequest="120" HorizontalOptions="Center" />
+                                    <Image Source="user_placeholder.png" WidthRequest="120" HeightRequest="120" HorizontalOptions="Center"/>
 
                                     <Frame BackgroundColor="#3d5266" BorderColor="Transparent"
                                            Padding="8,6" CornerRadius="3" HasShadow="False">
@@ -76,12 +85,14 @@
                 </HorizontalStackLayout>
 
                 <!-- Register card -->
-                <Frame BackgroundColor="#2a475e" BorderColor="#3d5a73"
+                <Frame BackgroundColor="#2a475e" BorderColor="#3d5a73" VerticalOptions="Start"
                        CornerRadius="6" Padding="20" WidthRequest="210" HasShadow="False">
-                    <VerticalStackLayout Spacing="10" VerticalOptions="Center">
+                    <VerticalStackLayout Spacing="10" VerticalOptions="Start">
                         <Image Source="user_placeholder.png" WidthRequest="120" HeightRequest="120" HorizontalOptions="Center" />
                         <Button Text="REGISTER"
                                 BackgroundColor="#5ba32b" TextColor="White"
+                                ImageSource="register_icon.png" 
+                                ContentLayout="Left, 6"
                                 FontAttributes="Bold" FontSize="13"
                                 CornerRadius="3" HeightRequest="38"
                                 Command="{Binding GoToCreateCommand}" />

@@ -75,6 +75,15 @@ public partial class VideoGameListViewModel(
             return;
 
         var library = libraries.First(l => l.Name == selected);
+
+        var fullLibrary = await libraryFacade.GetAsync(library.Id);
+
+        if (fullLibrary is not null && fullLibrary.VideoGames.Any(g => g.Id == gameId))
+        {
+            await alertService.DisplayAsync("Already in library", $"Game is already in \"{library.Name}\".");
+            return;
+        }
+
         await libraryFacade.AddVideoGameAsync(library.Id, gameId);
 
         MessengerService.Send(new LibraryEditMessage { LibraryId = library.Id });
