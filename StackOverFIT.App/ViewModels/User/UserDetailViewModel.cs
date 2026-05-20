@@ -57,6 +57,8 @@ public partial class UserDetailViewModel(
     private async Task LogOutAsync()
     {
         currentUserService.CurrentUserId = Guid.Empty;
+
+        await navigationService.GoToAsync($"//{NavigationService.LibraryListRouteAbsolute}");
         await navigationService.GoToAsync(NavigationService.UserListRouteAbsolute);
     }
 
