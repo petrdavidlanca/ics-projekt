@@ -23,8 +23,7 @@ public partial class UserDetailViewModel(
       IRecipient<LibraryEditMessage>,
       IRecipient<LibraryDeleteMessage>,
       IRecipient<VideoGameEditMessage>,
-      IRecipient<VideoGameDeleteMessage>,
-      IRecipient<ReloadDataMessage>
+      IRecipient<VideoGameDeleteMessage>
 {
     public Guid Id { get; set; }
 
@@ -59,8 +58,12 @@ public partial class UserDetailViewModel(
     {
         currentUserService.CurrentUserId = Guid.Empty;
 
-        await navigationService.GoToAsync($"//{NavigationService.LibraryListRouteAbsolute}");
-        await navigationService.GoToAsync(NavigationService.UserListRouteAbsolute);
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            Application.Current!.Windows[0].Page = new AppShell(navigationService);
+        });
+
+        await Task.CompletedTask;
     }
 
     [RelayCommand]

@@ -11,7 +11,6 @@
 
     <Grid RowDefinitions="Auto, Auto, *" Padding="40,30,40,20">
 
-        <!-- Header -->
         <Grid Grid.Row="0" ColumnDefinitions="*, Auto" Margin="0,0,0,20">
             <Label Grid.Column="0"
                    Text="My Libraries"
@@ -29,42 +28,50 @@
                     Command="{Binding GoToCreateCommand}" />
         </Grid>
 
-        <!-- Search / Filter / Sort bar -->
         <Grid Grid.Row="1"
               ColumnDefinitions="Auto, Auto, Auto, *"
               ColumnSpacing="8"
               Margin="0,0,0,16">
-            <Button Grid.Column="0"
-                    Text="Filter ▾"
+            <Button Grid.Column="0" Text="Filter"
+                    ImageSource="filter_icon.png" 
+                    ContentLayout="Right, 6"
                     BackgroundColor="#3d4450"
-                    TextColor="White"
-                    FontSize="13"
-                    CornerRadius="3"
-                    HeightRequest="36" />
+                    TextColor="White" FontSize="13" CornerRadius="3" HeightRequest="36"
+                    Command="{Binding ToggleFilterMenuCommand}" />
+
             <Button Grid.Column="1"
-                    Text="Sort ▾"
+                    Text="Sort"
+                    ImageSource="sort_icon.png" 
+                    ContentLayout="Right, 6"
                     BackgroundColor="#3d4450"
                     TextColor="White"
                     FontSize="13"
                     CornerRadius="3"
-                    HeightRequest="36" />
+                    HeightRequest="36"
+                    Command="{Binding SortCommand}" />
+
             <Button Grid.Column="2"
                     Text="Search"
+                    ImageSource="search_icon.png" 
+                    ContentLayout="Right, 6"
                     BackgroundColor="#1a7bc4"
                     TextColor="White"
                     FontSize="13"
                     CornerRadius="3"
-                    HeightRequest="36" />
+                    HeightRequest="36"
+                    Command="{Binding SearchCommand}" />
+
             <Entry Grid.Column="3"
                    Placeholder="Library name"
                    PlaceholderColor="#7a8b99"
                    TextColor="White"
                    BackgroundColor="#3d5266"
                    FontSize="13"
-                   HeightRequest="36" />
+                   HeightRequest="36"
+                   Text="{Binding SearchText}"
+                   ReturnCommand="{Binding SearchCommand}" />
         </Grid>
 
-        <!-- Library list -->
         <CollectionView Grid.Row="2"
                         ItemsSource="{Binding Libraries}">
             <CollectionView.ItemTemplate>
@@ -118,6 +125,43 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+
+        <BoxView Grid.Row="0" Grid.RowSpan="3"
+                 Color="Transparent"
+                 IsVisible="{Binding IsFilterMenuVisible}"
+                 ZIndex="5">
+            <BoxView.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding CloseFilterMenuCommand}" />
+            </BoxView.GestureRecognizers>
+        </BoxView>
+
+        <Border Grid.Row="2"
+                IsVisible="{Binding IsFilterMenuVisible}"
+                BackgroundColor="#2a475e"
+                Stroke="#3d5a73"
+                StrokeThickness="1"
+                WidthRequest="200"
+                HorizontalOptions="Start"
+                VerticalOptions="Start"
+                Margin="0, -5, 0, 0" 
+                ZIndex="10">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="4" />
+            </Border.StrokeShape>
+
+            <HorizontalStackLayout Padding="12, 8">
+                <CheckBox IsChecked="{Binding HideEmptyLibraries}" Color="#1a7bc4" />
+                <Label Text="Hide empty libraries" 
+                       TextColor="White" 
+                       FontSize="13"
+                       VerticalOptions="Center" 
+                       Margin="8,0,0,0">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ToggleFilterMenuCommand}" />
+                    </Label.GestureRecognizers>
+                </Label>
+            </HorizontalStackLayout>
+        </Border>
 
     </Grid>
 </views:ContentPageBase>
