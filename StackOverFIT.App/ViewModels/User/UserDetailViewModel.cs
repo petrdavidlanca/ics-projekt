@@ -62,6 +62,13 @@ public partial class UserDetailViewModel(
         await navigationService.GoToAsync(NavigationService.UserListRouteAbsolute);
     }
 
+    [RelayCommand]
+    private async Task GoToLibraryDetailAsync(Guid libraryId)
+    {
+        await navigationService.GoToAsync(NavigationService.LibraryListRouteAbsolute + NavigationService.LibraryDetailRouteRelative,
+            new Dictionary<string, object?> { ["Id"] = libraryId });
+    }
+
     public void Receive(UserEditMessage message)
     {
         if (message.UserId == User?.Id)
