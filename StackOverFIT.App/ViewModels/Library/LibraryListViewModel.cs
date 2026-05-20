@@ -18,7 +18,7 @@ public partial class LibraryListViewModel(
     IUserFacade userFacade,
     IMessengerService messengerService,
     ICurrentUserService currentUserService)
-    : ViewModelBase(messengerService), IRecipient<LibraryEditMessage>, IRecipient<LibraryDeleteMessage>
+    : ViewModelBase(messengerService), IRecipient<LibraryEditMessage>, IRecipient<LibraryDeleteMessage>, IRecipient<ReloadDataMessage>
 {
     [ObservableProperty]
     public partial IEnumerable<LibraryListModel> Libraries { get; set; } = [];
@@ -59,4 +59,8 @@ public partial class LibraryListViewModel(
 
     public void Receive(LibraryEditMessage message) => ForceDataRefreshOnNextAppearing();
     public void Receive(LibraryDeleteMessage message) => ForceDataRefreshOnNextAppearing();
+    public async void Receive(ReloadDataMessage message)
+    {
+        await LoadDataAsync();
+    }
 }

@@ -20,7 +20,7 @@ public partial class VideoGameListViewModel(
     IUserFacade userFacade,
     ILibraryFacade libraryFacade,
     IMessengerService messengerService)
-    : ViewModelBase(messengerService), IRecipient<VideoGameEditMessage>, IRecipient<VideoGameDeleteMessage>
+    : ViewModelBase(messengerService), IRecipient<VideoGameEditMessage>, IRecipient<VideoGameDeleteMessage>, IRecipient<ReloadDataMessage>
 {
     [ObservableProperty]
     public partial IEnumerable<VideoGameListModel> VideoGames { get; set; } = [];
@@ -146,4 +146,8 @@ public partial class VideoGameListViewModel(
 
     public void Receive(VideoGameEditMessage message) => ForceDataRefreshOnNextAppearing();
     public void Receive(VideoGameDeleteMessage message) => ForceDataRefreshOnNextAppearing();
+    public async void Receive(ReloadDataMessage message)
+    {
+        await LoadDataAsync();
+    }
 }

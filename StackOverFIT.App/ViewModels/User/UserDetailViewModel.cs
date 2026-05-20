@@ -23,7 +23,8 @@ public partial class UserDetailViewModel(
       IRecipient<LibraryEditMessage>,
       IRecipient<LibraryDeleteMessage>,
       IRecipient<VideoGameEditMessage>,
-      IRecipient<VideoGameDeleteMessage> 
+      IRecipient<VideoGameDeleteMessage>,
+      IRecipient<ReloadDataMessage>
 {
     public Guid Id { get; set; }
 
@@ -81,4 +82,8 @@ public partial class UserDetailViewModel(
     public void Receive(LibraryDeleteMessage message) => ForceDataRefreshOnNextAppearing();
     public void Receive(VideoGameEditMessage message) => ForceDataRefreshOnNextAppearing();
     public void Receive(VideoGameDeleteMessage message) => ForceDataRefreshOnNextAppearing();
+    public async void Receive(ReloadDataMessage message)
+    {
+        await LoadDataAsync();
+    }
 }
