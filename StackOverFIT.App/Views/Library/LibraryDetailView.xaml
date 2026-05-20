@@ -12,7 +12,6 @@
 
     <Grid RowDefinitions="Auto, Auto, Auto, *" Padding="40,30,40,20">
 
-        <!-- Header: EDIT + Library name + Game count -->
         <Grid Grid.Row="0"
               ColumnDefinitions="Auto, *, Auto, Auto"
               ColumnSpacing="12" Margin="0,0,0,20">
@@ -34,7 +33,6 @@
                    FontSize="24" TextColor="#c6d4df"
                    VerticalOptions="Center" />
 
-            <!-- DELETE library -->
             <Button Grid.Column="3" Text="DELETE"
                     BackgroundColor="#8b1a1a" TextColor="White"
                     FontAttributes="Bold" FontSize="13"
@@ -43,26 +41,38 @@
                     Command="{Binding DeleteCommand}" />
         </Grid>
 
-        <!-- Filter / Sort / Search -->
         <Grid Grid.Row="1"
               ColumnDefinitions="Auto, Auto, Auto, *"
               ColumnSpacing="8" Margin="0,0,0,16">
-            <Button Grid.Column="0" Text="Filter ▾" BackgroundColor="#3d4450"
-                    TextColor="White" FontSize="13" CornerRadius="3" HeightRequest="36" />
-            <Button Grid.Column="1" Text="Sort ▾" BackgroundColor="#3d4450"
-                    TextColor="White" FontSize="13" CornerRadius="3" HeightRequest="36" />
-            <Button Grid.Column="2" Text="Search" BackgroundColor="#1a7bc4"
-                    TextColor="White" FontSize="13" CornerRadius="3" HeightRequest="36" />
+            <Button Grid.Column="0" Text="Filter"
+                    ImageSource="filter_icon.png" ContentLayout="Right, 6"
+                    BackgroundColor="#3d4450" TextColor="White" FontSize="13" 
+                    CornerRadius="3" HeightRequest="36" 
+                    Command="{Binding ToggleFilterMenuCommand}" />
+
+            <Button Grid.Column="1" Text="Sort" 
+                    ImageSource="sort_icon.png" ContentLayout="Right, 6"
+                    BackgroundColor="#3d4450" TextColor="White" FontSize="13" 
+                    CornerRadius="3" HeightRequest="36"
+                    Command="{Binding SortCommand}" />
+
+            <Button Grid.Column="2" Text="Search" 
+                    ImageSource="search_icon.png" ContentLayout="Right, 6"
+                    BackgroundColor="#1a7bc4" TextColor="White" FontSize="13" 
+                    CornerRadius="3" HeightRequest="36"
+                    Command="{Binding SearchCommand}" />
+
             <Entry Grid.Column="3"
                    Placeholder="Game name" PlaceholderColor="#7a8b99"
                    TextColor="White" BackgroundColor="#3d5266"
-                   FontSize="13" HeightRequest="36" />
+                   FontSize="13" HeightRequest="36"
+                   Text="{Binding SearchText}"
+                   ReturnCommand="{Binding SearchCommand}" />
         </Grid>
 
-        <!-- Hry v knihovně -->
-        <CollectionView Grid.Row="3" ItemsSource="{Binding Library.VideoGames}">
+        <CollectionView Grid.Row="3" ItemsSource="{Binding DisplayedGames}">
             <CollectionView.EmptyView>
-                <Label Text="No games in this library yet. Use '+ ADD GAME' to add some."
+                <Label Text="No games match your search, or the library is empty."
                        TextColor="#7a8b99" FontSize="14" Margin="0,20" />
             </CollectionView.EmptyView>
             <CollectionView.ItemTemplate>
@@ -101,6 +111,43 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+
+        <BoxView Grid.Row="0" Grid.RowSpan="4"
+                 Color="Transparent"
+                 IsVisible="{Binding IsFilterMenuVisible}"
+                 ZIndex="5">
+            <BoxView.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding CloseFilterMenuCommand}" />
+            </BoxView.GestureRecognizers>
+        </BoxView>
+
+        <Border Grid.Row="3"
+                IsVisible="{Binding IsFilterMenuVisible}"
+                BackgroundColor="#2a475e"
+                Stroke="#3d5a73"
+                StrokeThickness="1"
+                WidthRequest="180"
+                HorizontalOptions="Start"
+                VerticalOptions="Start"
+                Margin="0, -5, 0, 0" 
+                ZIndex="10">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="4" />
+            </Border.StrokeShape>
+
+            <HorizontalStackLayout Padding="12, 8">
+                <CheckBox IsChecked="{Binding ShowAdultGames}" Color="#1a7bc4" />
+                <Label Text="Show 18+ Games" 
+                       TextColor="White" 
+                       FontSize="13"
+                       VerticalOptions="Center" 
+                       Margin="8,0,0,0">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ToggleFilterMenuCommand}" />
+                    </Label.GestureRecognizers>
+                </Label>
+            </HorizontalStackLayout>
+        </Border>
 
     </Grid>
 </views:ContentPageBase>
