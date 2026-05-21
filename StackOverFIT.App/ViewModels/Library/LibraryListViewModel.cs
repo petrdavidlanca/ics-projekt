@@ -21,12 +21,11 @@ public partial class LibraryListViewModel(
     : ViewModelBase(messengerService),
       IRecipient<LibraryEditMessage>,
       IRecipient<LibraryDeleteMessage>,
-      IRecipient<ReloadDataMessage> // <-- Your new message receiver!
+      IRecipient<ReloadDataMessage>
 {
     [ObservableProperty]
     public partial IEnumerable<LibraryListModel> Libraries { get; set; } = [];
 
-    // --- STATE VARIABLES ---
     private string currentSortBy = "name";
     private bool currentAscending = true;
 
@@ -39,33 +38,28 @@ public partial class LibraryListViewModel(
     [ObservableProperty]
     private bool hideEmptyLibraries = false;
 
-    // --- DATA LOADING & FILTERING ---
     protected override async Task LoadDataAsync()
     {
         await base.LoadDataAsync();
         await RefreshListAsync();
     }
 
-    // Consolidated method to handle searching, filtering, and sorting cleanly
     private async Task RefreshListAsync()
     {
         var user = await userFacade.GetAsync(currentUserService.CurrentUserId);
         IEnumerable<LibraryListModel> processedList = user?.GameLibrary ?? [];
 
-        // 1. Apply Search
         if (!string.IsNullOrWhiteSpace(SearchText))
         {
             processedList = processedList.Where(l =>
                 l.Name.Contains(SearchText, StringComparison.OrdinalIgnoreCase));
         }
 
-        // 2. Apply Empty Filter
         if (HideEmptyLibraries)
         {
             processedList = processedList.Where(l => l.NumOfGames > 0);
         }
 
-        // 3. Apply Sort
         processedList = currentSortBy switch
         {
             "name" => currentAscending
@@ -79,11 +73,9 @@ public partial class LibraryListViewModel(
             _ => processedList.OrderBy(l => l.Name)
         };
 
-        // 4. Update UI
         Libraries = processedList.ToList();
     }
 
-    // --- COMMANDS ---
     partial void OnSearchTextChanged(string value)
     {
         MainThread.BeginInvokeOnMainThread(async () => await RefreshListAsync());
@@ -132,7 +124,6 @@ public partial class LibraryListViewModel(
         MainThread.BeginInvokeOnMainThread(async () => await RefreshListAsync());
     }
 
-    // --- NAVIGATION ---
     [RelayCommand]
     private async Task GoToDetailAsync(Guid id)
     {
@@ -163,13 +154,11 @@ public partial class LibraryListViewModel(
             });
     }
 
-    // --- MESSAGES ---
     public void Receive(LibraryEditMessage message) => ForceDataRefreshOnNextAppearing();
     public void Receive(LibraryDeleteMessage message) => ForceDataRefreshOnNextAppearing();
 
     public void Receive(ReloadDataMessage message)
     {
-        // Safely ask the main thread to refresh the list when the message arrives
         MainThread.BeginInvokeOnMainThread(async () => await RefreshListAsync());
     }
 }
