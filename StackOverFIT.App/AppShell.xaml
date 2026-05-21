@@ -8,13 +8,11 @@
     xmlns:v="clr-namespace:StackOverFIT.App.Views.VideoGame"
     Title="StackOverFIT">
 
-    <!-- Přihlašovací obrazovka -->
     <ShellContent
         Title="Users"
         ContentTemplate="{DataTemplate u:UserListView}"
         Route="users" />
 
-    <!-- Hlavní aplikace po přihlášení -->
     <TabBar Route="app">
         <Tab Title="Store" Route="store">
             <ShellContent

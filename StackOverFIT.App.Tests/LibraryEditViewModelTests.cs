@@ -67,7 +67,7 @@ public class LibraryEditViewModelTests
     {
         var vm = CreateVM();
         vm.Library = CreateLibrary("");
-        vm.Library.Name = "   "; // whitespace
+        vm.Library.Name = "   ";
 
         await vm.SaveCommand.ExecuteAsync(null);
 
@@ -88,7 +88,7 @@ public class LibraryEditViewModelTests
             Email = "tester@example.com",
             GameLibrary = new ObservableCollection<LibraryListModel>
             {
-                new() { Id = Guid.NewGuid(), Name = "Games" } // duplicate
+                new() { Id = Guid.NewGuid(), Name = "Games" }
             }
         };
 

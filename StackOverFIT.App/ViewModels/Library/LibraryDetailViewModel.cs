@@ -30,7 +30,6 @@ public partial class LibraryDetailViewModel(
     [ObservableProperty]
     private IEnumerable<VideoGameListModel> displayedGames = [];
 
-    // --- STATE VARIABLES ---
     [ObservableProperty]
     private string searchText = string.Empty;
 
@@ -55,32 +54,26 @@ public partial class LibraryDetailViewModel(
         if (Id != Guid.Empty)
         {
             Library = await libraryFacade.GetAsync(Id);
-            RefreshListAsync(); // Apply filters as soon as it loads!
+            RefreshListAsync();
         }
     }
 
-    // --- FILTERING, SORTING, SEARCHING LOGIC ---
     private void RefreshListAsync()
     {
         if (Library?.VideoGames == null) return;
 
         var games = Library.VideoGames.AsEnumerable();
 
-        // 1. Apply Search
         if (!string.IsNullOrWhiteSpace(SearchText))
         {
             games = games.Where(g => g.Name.Contains(SearchText, StringComparison.OrdinalIgnoreCase));
         }
 
-        // 2. Apply 18+ Filter
         if (!ShowAdultGames)
         {
-            // Note: If you get a red underline on PegiRating here, it means it's missing from your VideoGameListModel! 
-            // Just add `public int PegiRating { get; set; }` to that model.
             games = games.Where(g => g.PegiRating <= 16);
         }
 
-        // 3. Apply Sorting
         games = currentSortBy switch
         {
             "name" => currentAscending ? games.OrderBy(g => g.Name) : games.OrderByDescending(g => g.Name),
@@ -88,11 +81,9 @@ public partial class LibraryDetailViewModel(
             _ => games.OrderBy(g => g.Name)
         };
 
-        // 4. Update the UI
         DisplayedGames = games.ToList();
     }
 
-    // --- COMMANDS ---
     partial void OnSearchTextChanged(string value) => RefreshListAsync();
     partial void OnShowAdultGamesChanged(bool value) => RefreshListAsync();
 
@@ -124,7 +115,6 @@ public partial class LibraryDetailViewModel(
     [RelayCommand]
     private void CloseFilterMenu() => IsFilterMenuVisible = false;
 
-    // --- EXISTING COMMANDS ---
     [RelayCommand]
     private async Task DeleteAsync()
     {
@@ -174,7 +164,6 @@ public partial class LibraryDetailViewModel(
             Library.NumOfGames--;
             OnPropertyChanged(nameof(Library));
 
-            // Re-apply filters so the removed game disappears from the screen!
             RefreshListAsync();
         }
     }

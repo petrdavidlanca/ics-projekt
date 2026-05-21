@@ -37,7 +37,6 @@
                        HasShadow="False">
                     <VerticalStackLayout Spacing="14">
 
-                        <!-- Library name -->
                         <Label Text="Library name"
                                TextColor="#c6d4df"
                                FontSize="13" />
@@ -49,7 +48,6 @@
                                FontSize="14"
                                ReturnType="Done" />
 
-                        <!-- SAVE -->
                         <Button Text="SAVE"
                                 BackgroundColor="#5ba32b"
                                 TextColor="White"
@@ -59,7 +57,6 @@
                                 HeightRequest="42"
                                 Command="{Binding SaveCommand}" />
 
-                        <!-- CANCEL -->
                         <Button Text="CANCEL"
                                 BackgroundColor="#3d4450"
                                 TextColor="White"

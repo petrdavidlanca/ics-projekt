@@ -54,7 +54,6 @@
                                                FontSize="13" HorizontalTextAlignment="Center" />
                                     </Frame>
 
-                                    <!-- LOG IN → profil s detaily -->
                                     <Button Text="LOG IN"
                                             BackgroundColor="#1a7bc4" TextColor="White"
                                             FontAttributes="Bold" FontSize="13"
@@ -62,7 +61,6 @@
                                             Command="{Binding Source={RelativeSource AncestorType={x:Type vm:UserListViewModel}}, Path=GoToDetailCommand}"
                                             CommandParameter="{Binding Id}" />
 
-                                    <!-- EDIT → rovnou editace -->
                                     <Button Text="EDIT"
                                             BackgroundColor="#f5a623" TextColor="White"
                                             FontAttributes="Bold" FontSize="13"
@@ -70,7 +68,6 @@
                                             Command="{Binding Source={RelativeSource AncestorType={x:Type vm:UserListViewModel}}, Path=GoToEditCommand}"
                                             CommandParameter="{Binding Id}" />
 
-                                    <!-- DELETE → smaže přímo -->
                                     <Button Text="DELETE"
                                             BackgroundColor="#8b1a1a" TextColor="White"
                                             FontAttributes="Bold" FontSize="13"
@@ -84,8 +81,7 @@
                     </BindableLayout.ItemTemplate>
                 </HorizontalStackLayout>
 
-                <!-- Register card -->
-                <Frame BackgroundColor="#2a475e" BorderColor="#3d5a73" VerticalOptions="Start"
+                <Frame BackgroundColor="#2a475e" BorderColor="#3d5a73"
                        CornerRadius="6" Padding="20" WidthRequest="210" HasShadow="False">
                     <VerticalStackLayout Spacing="10" VerticalOptions="Start">
                         <Image Source="user_placeholder.png" WidthRequest="120" HeightRequest="120" HorizontalOptions="Center" />
