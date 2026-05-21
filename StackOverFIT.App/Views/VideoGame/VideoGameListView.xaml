@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<views:ContentPageBase
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:StackOverFIT.App.Views"
+    xmlns:vm="clr-namespace:StackOverFIT.App.ViewModels"
+    xmlns:models="clr-namespace:StackOverFIT.BL.Models;assembly=StackOverFIT.BL"
+    x:DataType="vm:VideoGameListViewModel"
+    x:Class="StackOverFIT.App.Views.VideoGame.VideoGameListView"
+    BackgroundColor="#1b2838">
+
+    <Grid RowDefinitions="Auto, Auto, *" Padding="40,30,40,20">
+
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#1b2838" Offset="0.0" />
+                <GradientStop Color="#0a0f16" Offset="1.0" />
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <Label Grid.Row="0"
+               Text="Welcome to the store"
+               FontSize="32" TextColor="White"
+               Margin="0,0,0,20" />
+
+        <Grid Grid.Row="1"
+              ColumnDefinitions="Auto, Auto, Auto, *"
+              ColumnSpacing="8" Margin="0,0,0,16">
+            
+            <Button Grid.Column="0" Text="Filter" BackgroundColor="#3d4450"
+                    ImageSource="filter_icon.png" 
+                    ContentLayout="Right, 6"
+                    TextColor="White" FontSize="13" CornerRadius="3" HeightRequest="36"
+                    Command="{Binding ToggleFilterMenuCommand}" />
+
+            <Button Grid.Column="1" Text="Sort" BackgroundColor="#3d4450"
+                    ImageSource="sort_icon.png" 
+                    ContentLayout="Right, 6"
+                    TextColor="White" FontSize="13" CornerRadius="3" HeightRequest="36"
+                    Command="{Binding SortCommand}" />
+
+            <Button Grid.Column="2" Text="Search" BackgroundColor="#1a7bc4"
+                    ImageSource="search_icon.png" 
+                    ContentLayout="Right, 6"
+                    TextColor="White" FontSize="13" CornerRadius="3" HeightRequest="36"
+                    Command="{Binding SearchCommand}" />
+
+            <Entry Grid.Column="3"
+                   Placeholder="Game name" PlaceholderColor="#7a8b99"
+                   TextColor="White" BackgroundColor="#3d5266"
+                   FontSize="13" HeightRequest="36"
+                   Text="{Binding SearchText}"
+                   ReturnCommand="{Binding SearchCommand}" />
+        </Grid>
+
+        <CollectionView Grid.Row="2" ItemsSource="{Binding VideoGames}">
+            <CollectionView.EmptyView>
+                <Label Text="No games in the store yet."
+                       TextColor="#7a8b99" FontSize="14" Margin="0,20" />
+            </CollectionView.EmptyView>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:VideoGameListModel">
+                    <Grid Padding="0,4">
+
+                        <Border BackgroundColor="#2a475e" Stroke="#3d5a73"
+                                StrokeThickness="1" HeightRequest="80">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="4" />
+                            </Border.StrokeShape>
+
+                            <Grid ColumnDefinitions="120, *, Auto, Auto" ColumnSpacing="0">
+
+                                <Border Grid.Column="0"
+                                        BackgroundColor="#3d5266" StrokeThickness="0">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="4,0,0,4" />
+                                    </Border.StrokeShape>
+                                    <Image Aspect="AspectFill"
+                                           HeightRequest="80" WidthRequest="120"
+                                           Source="{Binding ImageUrl}" />
+                                </Border>
+
+                                <VerticalStackLayout Grid.Column="1" Spacing="2" Padding="16,4" VerticalOptions="Start">
+                                    <Label Text="{Binding Name}"
+                                           TextColor="White" 
+                                           FontSize="16" 
+                                           FontAttributes="Bold" />
+
+                                    <Label Text="{Binding Description}"
+                                           TextColor="#7a8b99" 
+                                           FontSize="13" 
+                                           LineBreakMode="TailTruncation" 
+                                           MaxLines="2" />
+                                </VerticalStackLayout>
+
+                                <Button Grid.Column="2" Text="OPEN"
+                                        BackgroundColor="#1a7bc4" TextColor="White"
+                                        ImageSource="play_icon.png" 
+                                        ContentLayout="Left, 6"
+                                        FontAttributes="Bold" FontSize="13"
+                                        CornerRadius="3" HeightRequest="36"
+                                        Margin="0,0,12,0" VerticalOptions="Center"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:VideoGameListViewModel}}, Path=GoToDetailCommand}"
+                                        CommandParameter="{Binding Id}" />
+
+                                <Button Grid.Column="3" Text="ADD"
+                                        ImageSource="add_icon.png" 
+                                        ContentLayout="Left, 6"
+                                        BackgroundColor="#5ba32b" TextColor="White"
+                                        FontAttributes="Bold" FontSize="13"
+                                        CornerRadius="3" WidthRequest="100"
+                                        Margin="0,0,12,0" VerticalOptions="Center"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:VideoGameListViewModel}}, Path=AddToLibraryCommand}"
+                                        CommandParameter="{Binding Id}" />
+
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <ContentView Grid.Row="0" Grid.RowSpan="10" Grid.ColumnSpan="10"
+             BackgroundColor="Transparent"
+             IsVisible="{Binding IsFilterMenuVisible}"
+             ZIndex="9">
+            <ContentView.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding CloseMenusCommand}" />
+            </ContentView.GestureRecognizers>
+        </ContentView>
+
+        <Border Grid.Row="2"
+                IsVisible="{Binding IsFilterMenuVisible}"
+                BackgroundColor="#2a475e"
+                Stroke="#3d5a73"
+                StrokeThickness="1"
+                WidthRequest="180"
+                HorizontalOptions="Start"
+                VerticalOptions="Start"
+                Margin="0, -5, 0, 0" 
+                ZIndex="10">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="4" />
+            </Border.StrokeShape>
+
+            <HorizontalStackLayout Padding="12, 8">
+                <CheckBox IsChecked="{Binding ShowAdultGames}" Color="#1a7bc4" />
+                <Label Text="Show 18+ Games" 
+                       TextColor="White" 
+                       FontSize="13"
+                       VerticalOptions="Center" 
+                       Margin="8,0,0,0">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ToggleFilterMenuCommand}" />
+                    </Label.GestureRecognizers>
+                </Label>
+            </HorizontalStackLayout>
+        </Border>
+
+    </Grid>
+</views:ContentPageBase>

@@ -1,5 +1,6 @@
 ﻿using StackOverFIT.BL.Models;
 using StackOverFIT.DAL.Entities;
+using System.Collections.ObjectModel;
 
 namespace StackOverFIT.BL.Mappers;
 
@@ -12,6 +13,7 @@ public class VideoGameModelMapper : ModelMapperBase<VideoGameEntity, VideoGameLi
             {
                 Id = entity.Id,
                 Name = entity.Name,
+                Description = entity.Description,
                 ImageUrl = entity.ImageUrl
             };
 
@@ -24,7 +26,8 @@ public class VideoGameModelMapper : ModelMapperBase<VideoGameEntity, VideoGameLi
                 Name = entity.Name,
                 Description = entity.Description,
                 PegiRating = entity.PegiRating,
-                ImageUrl = entity.ImageUrl
+                ImageUrl = entity.ImageUrl,
+                GameGenres = new ObservableCollection<DAL.Enums.GameGenres>(entity.GameGenres)
             };
 
     public override VideoGameEntity MapToEntity(VideoGameDetailModel model)
@@ -34,6 +37,7 @@ public class VideoGameModelMapper : ModelMapperBase<VideoGameEntity, VideoGameLi
             Name = model.Name,
             Description = model.Description,
             PegiRating = model.PegiRating,
-            ImageUrl = model.ImageUrl
+            ImageUrl = model.ImageUrl,
+            GameGenres = model.GameGenres.ToList()
         };
 }

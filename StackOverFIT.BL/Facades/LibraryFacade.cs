@@ -5,6 +5,7 @@ using StackOverFIT.DAL.Entities;
 using StackOverFIT.DAL.Mappers;
 using StackOverFIT.DAL.Repositories;
 using StackOverFIT.DAL.UnitOfWork;
+using Microsoft.EntityFrameworkCore;
 
 namespace StackOverFIT.BL.Facades;
 
@@ -15,22 +16,24 @@ public class LibraryFacade(
         unitOfWorkFactory, modelMapper), ILibraryFacade
 {
     protected override ICollection<string> IncludesNavigationPathDetail =>
-        new[] {nameof(LibraryEntity.VideoGames)};
+        new[] { nameof(LibraryEntity.VideoGames) };
 
     public async Task AddVideoGameAsync(Guid libraryId, Guid videoGameId)
     {
         await using IUnitOfWork uow = UnitOfWorkFactory.Create();
+        var junctionRepo = uow.GetRepository<LibraryVideoGameEntity, LibraryVideoGameEntityMapper>();
 
-        IRepository<VideoGameEntity> gameRepository =
-            uow.GetRepository<VideoGameEntity, VideoGameEntityMapper>();
+        bool exists = await junctionRepo.Get()
+            .AnyAsync(x => x.LibraryId == libraryId && x.VideoGameId == videoGameId);
 
-        VideoGameEntity? game = await gameRepository.GetByIdAsync(videoGameId);
-
-        if (game != null)
+        if (!exists)
         {
-            game.LibraryId = libraryId;
-
-            await gameRepository.UpdateAsync(game);
+            junctionRepo.Insert(new LibraryVideoGameEntity
+            {
+                Id = Guid.NewGuid(),
+                LibraryId = libraryId,
+                VideoGameId = videoGameId
+            });
             await uow.CommitAsync();
         }
     }
@@ -38,18 +41,37 @@ public class LibraryFacade(
     public async Task RemoveVideoGameAsync(Guid libraryId, Guid videoGameId)
     {
         await using IUnitOfWork uow = UnitOfWorkFactory.Create();
+        var junctionRepo = uow.GetRepository<LibraryVideoGameEntity, LibraryVideoGameEntityMapper>();
 
-        IRepository<VideoGameEntity> gameRepository =
-            uow.GetRepository<VideoGameEntity, VideoGameEntityMapper>();
+        var junction = await junctionRepo.Get()
+            .SingleOrDefaultAsync(x => x.LibraryId == libraryId && x.VideoGameId == videoGameId);
 
-        VideoGameEntity? game = await gameRepository.GetByIdAsync(videoGameId);
-
-        if (game != null && game.LibraryId == libraryId)
+        if (junction != null)
         {
-            game.LibraryId = null;
-
-            await gameRepository.UpdateAsync(game);
+            await junctionRepo.DeleteAsync(junction.Id);
             await uow.CommitAsync();
         }
+    }
+
+    public async Task<IEnumerable<LibraryListModel>> GetFilteredLibrariesAsync(string? searchTerm, string? sortBy, bool ascending = true)
+    {
+        await using IUnitOfWork uow = UnitOfWorkFactory.Create();
+
+        IQueryable<LibraryEntity> query = uow.GetRepository<LibraryEntity, LibraryEntityMapper>().Get().Include(l => l.VideoGames);
+
+        if (!string.IsNullOrWhiteSpace(searchTerm))
+        {
+            searchTerm = searchTerm.ToLower();
+            query = query.Where(l => l.Name.ToLower().Contains(searchTerm));
+        }
+
+        query = sortBy?.ToLower() switch
+        {
+            "name" => ascending ? query.OrderBy(l => l.Name) : query.OrderByDescending(l => l.Name),
+            _ => query.OrderBy(l => l.Name)
+        };
+
+        var entities = await query.ToListAsync().ConfigureAwait(false);
+        return ModelMapper.MapToListModel(entities);
     }
 }

@@ -1,5 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using System;
 
 namespace StackOverFIT.BL.Models;
 
@@ -16,6 +15,9 @@ public partial class VideoGameDetailModel : ModelBase
 
     [ObservableProperty]
     public partial string? ImageUrl { get; set; }
+
+    [ObservableProperty]
+    public partial System.Collections.ObjectModel.ObservableCollection<StackOverFIT.DAL.Enums.GameGenres> GameGenres { get; set; } = new();
 
     public static VideoGameDetailModel Empty => new()
     {

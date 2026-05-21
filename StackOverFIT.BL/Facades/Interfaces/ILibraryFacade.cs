@@ -8,4 +8,5 @@ public interface ILibraryFacade : IFacade<LibraryEntity, LibraryListModel, Libra
 {
     Task AddVideoGameAsync(Guid libraryId, Guid videoGameId);
     Task RemoveVideoGameAsync(Guid libraryId, Guid videoGameId);
+    Task<IEnumerable<LibraryListModel>> GetFilteredLibrariesAsync(string? searchTerm, string? sortBy, bool ascending = true);
 }

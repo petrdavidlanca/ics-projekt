@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="StackOverFIT.App.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:u="clr-namespace:StackOverFIT.App.Views.User"
+    xmlns:l="clr-namespace:StackOverFIT.App.Views.Library"
+    xmlns:v="clr-namespace:StackOverFIT.App.Views.VideoGame"
+    Title="StackOverFIT">
+
+    <ShellContent
+        Title="Users"
+        ContentTemplate="{DataTemplate u:UserListView}"
+        Route="users" />
+
+    <TabBar Route="app">
+        <Tab Title="Store" Route="store">
+            <ShellContent
+                ContentTemplate="{DataTemplate v:VideoGameListView}"
+                Route="videogames" />
+        </Tab>
+
+        <Tab Title="Library" Route="library">
+            <ShellContent
+                ContentTemplate="{DataTemplate l:LibraryListView}"
+                Route="libraries" />
+        </Tab>
+
+        <Tab Title="Create Game" Route="creategame">
+            <ShellContent
+                ContentTemplate="{DataTemplate v:VideoGameEditView}"
+                Route="newgame" />
+        </Tab>
+
+        <Tab Title="Profile" Route="profile">
+            <ShellContent
+                ContentTemplate="{DataTemplate u:UserDetailView}"
+                Route="userdetail" />
+        </Tab>
+    </TabBar>
+
+</Shell>
