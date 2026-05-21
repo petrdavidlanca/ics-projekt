@@ -31,7 +31,6 @@ public static class AppInstaller
         services.AddTransient<VideoGameDetailViewModel>();
         services.AddTransient<VideoGameEditViewModel>();
 
-        //potom i views napr. services.AddTransient<UserListView>();
         services.AddTransient<UserListView>();
         services.AddTransient<UserDetailView>();
         services.AddTransient<UserEditView>();
